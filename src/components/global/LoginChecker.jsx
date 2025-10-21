@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function LoginChecker() {
   const { loginToken, setLoginToken } = useContext(LoginContext);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   useEffect(() => {
     if (window.localStorage.getItem("login_token")) handleVerifyToken();
@@ -17,7 +17,7 @@ export default function LoginChecker() {
     // TODO: implement popup alert system
     if (response && response.error) {
       alert("Invalid login token");
-      navigate("/auth");
+      // navigate("/auth");
       return;
     }
 
