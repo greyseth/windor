@@ -1,8 +1,11 @@
+import { Outlet } from "react-router-dom";
+
 function App() {
   return (
     <>
-      <p className="hellotext">Hello</p>
-      <p>World</p>
+      <p>This is the main container for the application</p>
+      <Outlet />
+      <p>Navbar goes here</p>
     </>
   );
 }

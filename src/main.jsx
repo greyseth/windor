@@ -4,12 +4,32 @@ import "../src/assets/css/style.css";
 import App from "./App.jsx";
 import LoginProvider from "./providers/LoginProvider.jsx";
 import LoginChecker from "./components/global/LoginChecker.jsx";
+import { createBrowserRouter, Router, RouterProvider } from "react-router-dom";
+import Login from "./pages/Login.jsx";
+import Home from "./pages/Home.jsx";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+    ],
+  },
+  {
+    path: "/auth",
+    element: <Login />,
+  },
+]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <LoginProvider>
       <LoginChecker />
-      <App />
+      <RouterProvider router={router} />
     </LoginProvider>
   </StrictMode>
 );

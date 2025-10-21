@@ -5,4 +5,10 @@ export default function Login() {
   const { loginToken, setLoginToken } = useContext(LoginContext);
 
   const [loginInput, setLoginInput] = useState({});
+
+  return (
+    <>
+      <p>Login page</p>
+    </>
+  );
 }
