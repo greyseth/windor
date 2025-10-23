@@ -7,6 +7,7 @@ import LoginChecker from "./components/global/LoginChecker.jsx";
 import { createBrowserRouter, Router, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login.jsx";
 import Home from "./pages/Home.jsx";
+import NotFound from "./pages/404.jsx";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: "/auth",
     element: <Login />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

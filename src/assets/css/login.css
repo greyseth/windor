@@ -1,0 +1,16 @@
+.blue-circle {
+  width: 215%;
+  height: 100vh;
+  aspect-ratio: 1/1;
+
+  background: linear-gradient(
+    to bottom right,
+    var(--secondary-color),
+    var(--primary-color)
+  );
+
+  border-radius: 200%;
+  position: absolute;
+  left: -80%;
+  bottom: 20%;
+}
