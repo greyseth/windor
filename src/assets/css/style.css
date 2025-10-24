@@ -7,7 +7,6 @@
 
 * {
   box-sizing: border-box;
-  z-index: 1;
 
   font-family: "Open Sans", sans-serif;
 }
@@ -50,6 +49,9 @@
 .btn.white {
   @apply bg-white text-black;
 }
+.btn.red {
+  @apply bg-red-500;
+}
 .btn.primary {
   @apply bg-(--primary-color);
 }
@@ -65,4 +67,10 @@
 .btn > img {
   width: 32px;
   margin: 0 auto;
+}
+.btn.smaller {
+  @apply p-2 text-sm rounded-sm;
+}
+.btn.noshadow {
+  box-shadow: none;
 }

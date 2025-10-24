@@ -11,6 +11,7 @@ import TextInput from "../components/TextInput";
 import Checkbox from "../components/Checkbox";
 import { Link } from "react-router-dom";
 import request from "../util/API";
+import { PopupContext } from "../providers/PopupProvider";
 
 export default function Auth() {
   const [formType, setFormType] = useState("login");
@@ -18,7 +19,7 @@ export default function Auth() {
   return (
     <>
       {/* Background decors container */}
-      <div className="z-0 fixed left-0 top-0 h-screen w-full">
+      <div className="-z-10 fixed left-0 top-0 h-screen w-full">
         {/* Blue circle BG */}
         <div className="blue-circle"></div>
       </div>
@@ -42,6 +43,7 @@ export default function Auth() {
 
 function LoginForm({ setFormType }) {
   const { loginToken, setLoginToken } = useContext(LoginContext);
+  const { popup, setPopup } = useContext(PopupContext);
 
   const [loginInput, setLoginInput] = useState({});
   // const [rememberMe, setRememberMe] = useState(false);

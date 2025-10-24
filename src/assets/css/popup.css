@@ -1,0 +1,38 @@
+.popup-container {
+  --popup-margin: 0.5em;
+
+  width: calc(100% - var(--popup-margin) * 2);
+  margin: var(--popup-margin);
+
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+.popup-container.in {
+  animation: popup-in 1 normal forwards 0.5s;
+}
+.popup-container.out {
+  animation: popup-out 1 normal forwards 0.5s;
+}
+
+@keyframes popup-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
+
+@keyframes popup-out {
+  0% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}

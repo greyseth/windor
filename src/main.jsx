@@ -8,6 +8,8 @@ import { createBrowserRouter, Router, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import NotFound from "./pages/404.jsx";
 import Auth from "./pages/Login.jsx";
+import PopupProvider from "./providers/PopupProvider.jsx";
+import PopupHandler from "./components/global/PopupHandler.jsx";
 
 const router = createBrowserRouter([
   {
@@ -33,8 +35,12 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <LoginProvider>
-      <LoginChecker />
-      <RouterProvider router={router} />
+      <PopupProvider>
+        <LoginChecker />
+        <PopupHandler />
+
+        <RouterProvider router={router} />
+      </PopupProvider>
     </LoginProvider>
   </StrictMode>
 );
