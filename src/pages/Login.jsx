@@ -10,12 +10,10 @@ import { LoginContext } from "../providers/LoginProvider";
 import TextInput from "../components/TextInput";
 import Checkbox from "../components/Checkbox";
 import { Link } from "react-router-dom";
+import request from "../util/API";
 
-export default function Login() {
-  const { loginToken, setLoginToken } = useContext(LoginContext);
-
-  const [loginInput, setLoginInput] = useState({});
-  const [rememberMe, setRememberMe] = useState(false);
+export default function Auth() {
+  const [formType, setFormType] = useState("login");
 
   return (
     <>
@@ -32,52 +30,151 @@ export default function Login() {
           <h1 className="text-4xl font-bold text-white text-center">WINDOR</h1>
         </div>
 
-        {/* Form inputs */}
-        <div className="space-y-4">
-          <TextInput
-            type={"text"}
-            value={loginInput.email}
-            placeholder={"Email"}
-            onChange={(v) => setLoginInput({ ...loginInput, email: v })}
-            img={personIcon}
-            customStyle={``}
-          />
-          <TextInput
-            type={"password"}
-            value={loginInput.password}
-            placeholder={"Password"}
-            onChange={(v) => setLoginInput({ ...loginInput, password: v })}
-            img={lockIcon}
-            customStyle={``}
-          />
-        </div>
+        {formType === "login" ? (
+          <LoginForm setFormType={setFormType} />
+        ) : (
+          <RegisterForm setFormType={setFormType} />
+        )}
+      </div>
+    </>
+  );
+}
 
-        {/* Submit */}
-        <div>
-          <Checkbox
-            label={"Remember Me"}
-            isChecked={rememberMe}
-            onChange={(v) => setRememberMe(v)}
-          />
-          <button className="btn white mt-4">LOGIN</button>
-        </div>
+function LoginForm({ setFormType }) {
+  const { loginToken, setLoginToken } = useContext(LoginContext);
 
-        {/* Alternative Methods */}
-        <div style={{ justifyContent: "flex-end" }}>
-          <Link target="_blank" className="text-center underline text-black">
-            Don't have an account?
-          </Link>
-          <div className="grid grid-cols-[1fr_1fr]">
-            <div className="p-2">
-              <button className="btn white border-2 w-full">
-                <img src={googleIcon} />
-              </button>
-            </div>
-            <div className="p-2">
-              <button className="btn white border-2 w-full">
-                <img src={xIcon} />
-              </button>
-            </div>
+  const [loginInput, setLoginInput] = useState({});
+  // const [rememberMe, setRememberMe] = useState(false);
+
+  async function handleLogin() {
+    const response = await request("POST", "/user/login", loginInput);
+    if (!response || response.error) {
+      alert("Add error popup here");
+      return;
+    }
+
+    window.localStorage.setItem("login_token", response.login_token);
+    setLoginToken(response.login_token);
+  }
+
+  return (
+    <>
+      {/* Form inputs */}
+      <div className="space-y-4">
+        <TextInput
+          type={"text"}
+          value={loginInput.email}
+          placeholder={"Email"}
+          onChange={(v) => setLoginInput({ ...loginInput, email: v })}
+          img={mailIcon}
+          customStyle={``}
+        />
+        <TextInput
+          type={"password"}
+          value={loginInput.password}
+          placeholder={"Password"}
+          onChange={(v) => setLoginInput({ ...loginInput, password: v })}
+          img={lockIcon}
+          customStyle={``}
+        />
+      </div>
+
+      {/* Submit */}
+      <div>
+        {/* <Checkbox
+          label={"Remember Me"}
+          isChecked={rememberMe}
+          onChange={(v) => setRememberMe(v)}
+        /> */}
+        <button className="btn white mt-4">LOGIN</button>
+      </div>
+
+      {/* Alternative Methods */}
+      <div style={{ justifyContent: "flex-end" }}>
+        <p
+          className="text-center underline text-black cursor-pointer select-none"
+          onClick={() => setFormType("register")}
+        >
+          Don't have an account?
+        </p>
+        <div className="grid grid-cols-[1fr_1fr]">
+          <div className="p-2">
+            <button className="btn white border-2 w-full">
+              <img src={googleIcon} />
+            </button>
+          </div>
+          <div className="p-2">
+            <button className="btn white border-2 w-full">
+              <img src={xIcon} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function RegisterForm({ setFormType }) {
+  const [registerInput, setRegisterInput] = useState({});
+
+  return (
+    <>
+      {/* Form inputs */}
+      <div className="space-y-4">
+        <TextInput
+          type={"text"}
+          value={registerInput.username}
+          placeholder={"Username"}
+          onChange={(v) => setLoginInput({ ...registerInput, username: v })}
+          img={personIcon}
+          customStyle={``}
+        />
+        <TextInput
+          type={"text"}
+          value={registerInput.email}
+          placeholder={"Email"}
+          onChange={(v) => setRegisterInput({ ...registerInput, email: v })}
+          img={mailIcon}
+          customStyle={``}
+        />
+        <TextInput
+          type={"password"}
+          value={registerInput.password}
+          placeholder={"Password"}
+          onChange={(v) => setRegisterInput({ ...registerInput, password: v })}
+          img={lockIcon}
+          customStyle={``}
+        />
+      </div>
+
+      {/* Submit */}
+      <div>
+        {/* <Checkbox
+          label={"Remember Me"}
+          isChecked={rememberMe}
+          onChange={(v) => setRememberMe(v)}
+        /> */}
+        <button className="btn white mt-4">REGISTER</button>
+      </div>
+
+      {/* Alternative Methods */}
+      <div style={{ justifyContent: "flex-end" }}>
+        <a
+          className="text-center underline text-black cursor-pointer select-none"
+          onClick={() => setFormType("login")}
+        >
+          Already have an account?
+        </a>
+        <div className="grid grid-cols-[1fr_1fr]">
+          <div className="p-2">
+            <button className="btn white border-2 w-full">
+              <img src={googleIcon} />
+            </button>
+          </div>
+          <div className="p-2">
+            <button className="btn white border-2 w-full">
+              <img src={xIcon} />
+            </button>
           </div>
         </div>
       </div>
