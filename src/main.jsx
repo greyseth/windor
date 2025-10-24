@@ -5,8 +5,11 @@ import App from "./App.jsx";
 import LoginProvider from "./providers/LoginProvider.jsx";
 import LoginChecker from "./components/global/LoginChecker.jsx";
 import { createBrowserRouter, Router, RouterProvider } from "react-router-dom";
-import Login from "./pages/Login.jsx";
 import Home from "./pages/Home.jsx";
+import NotFound from "./pages/404.jsx";
+import Auth from "./pages/Login.jsx";
+import PopupProvider from "./providers/PopupProvider.jsx";
+import PopupHandler from "./components/global/PopupHandler.jsx";
 
 const router = createBrowserRouter([
   {
@@ -21,15 +24,23 @@ const router = createBrowserRouter([
   },
   {
     path: "/auth",
-    element: <Login />,
+    element: <Auth />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <LoginProvider>
-      <LoginChecker />
-      <RouterProvider router={router} />
+      <PopupProvider>
+        <LoginChecker />
+        <PopupHandler />
+
+        <RouterProvider router={router} />
+      </PopupProvider>
     </LoginProvider>
   </StrictMode>
 );

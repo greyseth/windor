@@ -1,5 +1,76 @@
 @import "tailwindcss";
 
-.hellotext {
-  @apply text-2xl font-bold;
+:root {
+  --primary-color: #0f61ab;
+  --secondary-color: #029ec5;
+}
+
+* {
+  box-sizing: border-box;
+
+  font-family: "Open Sans", sans-serif;
+}
+
+.textinput {
+  @apply rounded-[15px] bg-gray-400/45 p-4 flex items-center gap-4;
+  transition: 0.25s;
+}
+.textinput > input {
+  @apply placeholder:text-sm placeholder:text-black/50 basis-0 grow text-white;
+}
+.textinput > input:focus {
+  outline: none;
+  border: none;
+}
+.textinput:focus-within {
+  box-shadow: 0 0 0 4px rgba(15, 97, 171, 0.12);
+  transform: scale(102%);
+  @apply bg-gray-400/60;
+}
+
+.checkbox {
+  transition: 0.25s;
+  @apply p-3 rounded-[15px] bg-gray-400/45 flex items-center gap-1;
+}
+.checkbox:hover {
+  box-shadow: 0 0 0 4px rgba(15, 97, 171, 0.12);
+  transform: scale(102%);
+  @apply bg-gray-400/60;
+}
+.checkbox p {
+  @apply text-white;
+}
+
+.btn {
+  box-shadow: 0 0 0 4px rgba(15, 97, 171, 0.12);
+  transition: 0.25s;
+  @apply rounded-[15px] p-4 font-bold text-white;
+}
+.btn.white {
+  @apply bg-white text-black;
+}
+.btn.red {
+  @apply bg-red-500;
+}
+.btn.primary {
+  @apply bg-(--primary-color);
+}
+.btn.secondary {
+  @apply bg-(--secondary-color);
+}
+.btn:hover {
+  box-shadow: none;
+}
+.btn:active {
+  transform: scale(102%);
+}
+.btn > img {
+  width: 32px;
+  margin: 0 auto;
+}
+.btn.smaller {
+  @apply p-2 text-sm rounded-sm;
+}
+.btn.noshadow {
+  box-shadow: none;
 }
