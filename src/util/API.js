@@ -21,7 +21,7 @@ export default async function request(method, endpoint, body) {
 
   try {
     const request = await fetch(
-      "https://profilesite-professional.onrender.com" + endpoint,
+      import.meta.env.VITE_APIHOST + endpoint,
       requestOptions
     );
 
