@@ -10,14 +10,19 @@ import NotFound from "./pages/404.jsx";
 import Auth from "./pages/Login.jsx";
 import PopupProvider from "./providers/PopupProvider.jsx";
 import PopupHandler from "./components/global/PopupHandler.jsx";
+import Landing from "./pages/Landing.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <Landing />,
+  },
+  {
+    path: "/app",
     element: <App />,
     children: [
       {
-        path: "/",
+        path: "/app",
         element: <Home />,
       },
     ],
