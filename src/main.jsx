@@ -11,6 +11,7 @@ import Auth from "./pages/Login.jsx";
 import PopupProvider from "./providers/PopupProvider.jsx";
 import PopupHandler from "./components/global/PopupHandler.jsx";
 import Landing from "./pages/Landing.jsx";
+import Profile from "./pages/Profile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "/app",
         element: <Home />,
+      },
+      {
+        path: "/app/profile",
+        element: <Profile />,
       },
     ],
   },

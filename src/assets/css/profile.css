@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+.profile-container {
+  @apply w-full h-full flex flex-col;
+}
+
+.profile-details {
+  width: 100%;
+  padding: 2em;
+
+  display: grid;
+  grid-template-columns: 75px 1fr;
+  grid-template-rows: repeat(3, 1fr);
+  grid-column-gap: 2em;
+  grid-row-gap: 0.5em;
+
+  @apply bg-gray-300;
+}
+.profile-details > *:nth-child(1) {
+  grid-area: 1 / 1 / 4 / 2;
+}
+.profile-details > *:nth-child(2) {
+  grid-area: 1 / 2 / 2 / 3;
+}
+.profile-details > *:nth-child(3) {
+  grid-area: 2 / 2 / 3 / 3;
+}
+.profile-details > *:nth-child(4) {
+  grid-area: 3 / 2 / 4 / 3;
+}
+
+.mystore-list {
+  width: 100%;
+  overflow-x: auto;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 1em;
+}
+.mystore-list li {
+  min-width: 100%;
+  height: auto;
+  aspect-ratio: 1/1;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  transition: 0.25s;
+}
+.mystore-list li.new {
+  @apply bg-gray-500 rounded-lg text-white;
+  justify-content: center;
+  align-items: center;
+}
+.mystore-list li:active {
+  transform: scale(102%);
+}
