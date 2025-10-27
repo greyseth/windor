@@ -11,10 +11,10 @@ function PopupProvider({ children }) {
   //     cantIgnore: true//false,
   //     buttons: [
   //         {
-  //         label: "",
-  //         color: "white//red//green//primary//secondary",
-  //         onClick: () => {},
-  //         dontCloseOnClick: true//false,
+  //            label: "",
+  //            color: "white//red//green//primary//secondary",
+  //            onClick: () => {},
+  //            dontCloseOnClick: true//false,
   //         },
   //     ],
   //   }
