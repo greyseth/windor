@@ -3,10 +3,13 @@ import starIcon from "../assets/icons/icon_star.svg";
 import { useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 import LoadingError from "./LoadingError";
+import { useNavigate } from "react-router-dom";
 
 export default function StoreItems({ fetch, label, style, collapse }) {
   // fetch -> store fetch function
   // style -> 'basic', 'long', 'square'
+
+  const navigate = useNavigate();
 
   const [stores, setStores] = useState({
     loading: false,
@@ -72,7 +75,17 @@ export default function StoreItems({ fetch, label, style, collapse }) {
               {stores.data
                 .filter((_, i) => (!collapse ? true : i + 1 <= collapse.limit))
                 .map((s) =>
-                  style === "basic" ? <Basic s={s} /> : <Long s={s} />
+                  style === "basic" ? (
+                    <Basic
+                      s={s}
+                      onClick={(s) => navigate(`/app/stores/${s.id_store}`)}
+                    />
+                  ) : (
+                    <Long
+                      s={s}
+                      onClick={(s) => navigate(`/app/stores/${s.id_store}`)}
+                    />
+                  )
                 )}
               {collapse ? (
                 <button className="btn primary full">Show More</button>
@@ -91,7 +104,7 @@ function Basic({ s, onClick }) {
   return (
     <li
       key={s.id_store}
-      onClick={onClick}
+      onClick={() => onClick(s)}
       className="p-4 rounded-lg shadow-md w-full grid grid-cols-[86px_1fr] gap-4 storeitem"
     >
       <img src={s.thumbnail} className="rounded-md object-cover" />
@@ -114,7 +127,7 @@ function Long({ s, onClick }) {
   return (
     <li
       key={s.id_store}
-      onClick={onClick}
+      onClick={() => onClick(s)}
       className="rounded-lg shadow-md w-full grid grid-cols-[40%_1fr] gap-4 storeitem overflow-clip"
     >
       <div className="flex justify-center items-center flex-col p-4 text-center">

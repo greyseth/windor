@@ -1,0 +1,79 @@
+.storeimg-container {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/9;
+  background-color: var(--primary-color);
+  position: relative;
+}
+.storeimg-container .images {
+  width: 100%;
+  height: 100%;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  display: flex;
+}
+.storeimg-container .images img {
+  height: 100%;
+  width: auto;
+  aspect-ratio: 16/9;
+  object-fit: contain;
+  scroll-snap-align: start;
+}
+.storeimg-container .buttons {
+  width: 100%;
+  padding: 0.5em;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
+  display: flex;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.category-selector {
+  width: 100%;
+  overflow-x: scroll;
+  display: flex;
+  padding-bottom: 1em;
+}
+.category-selector button {
+  min-width: 30%;
+  padding: 0.5em;
+  border-right: 2px solid var(--secondary-color);
+  transition: 0.25s;
+}
+.category-selector button:first {
+  border-left: 2px solid var(--secondary-color);
+}
+.category-selector button:active {
+  color: white;
+  background-color: var(--secondary-color);
+  transform: scale(105%);
+}
+.category-selector button.selected {
+  border-bottom: 4px solid var(--secondary-color);
+}
+
+.checkout {
+  width: 100%;
+  padding: 1em;
+  position: fixed;
+  z-index: 40;
+  left: 0;
+  bottom: 0;
+}
+.checkout .btn {
+  animation: checkout-in 1 forwards normal 0.25s;
+}
+
+@keyframes checkout-in {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}

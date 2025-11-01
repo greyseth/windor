@@ -1,7 +1,7 @@
 .navbar {
   --navbar-color: rgb(255, 255, 255);
   position: relative;
-  z-index: 40;
+  z-index: 20;
 }
 
 .navbar .top {
