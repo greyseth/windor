@@ -7,7 +7,7 @@ export default function TextInput({
   customStyle,
 }) {
   return (
-    <div className={`textinput ${customStyle}`}>
+    <div className={`textinput bg-gray-400/45 ${customStyle}`}>
       {img ? <img src={img} /> : null}
       <input
         type={type}

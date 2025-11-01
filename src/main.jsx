@@ -11,6 +11,10 @@ import Auth from "./pages/Login.jsx";
 import PopupProvider from "./providers/PopupProvider.jsx";
 import PopupHandler from "./components/global/PopupHandler.jsx";
 import Landing from "./pages/Landing.jsx";
+import Profile from "./pages/Profile.jsx";
+import Explore from "./pages/Explore.jsx";
+import Store from "./pages/Store.jsx";
+import CartProvider from "./providers/CartProvider.jsx";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +28,20 @@ const router = createBrowserRouter([
       {
         path: "/app",
         element: <Home />,
+      },
+      {
+        path: "/app/profile",
+        element: <Profile />,
+      },
+      {
+        path: "/app/stores",
+        element: <Explore />,
+        children: [
+          {
+            path: "/app/stores/:id_store",
+            element: <Store />,
+          },
+        ],
       },
     ],
   },
@@ -41,10 +59,12 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <LoginProvider>
       <PopupProvider>
-        <LoginChecker />
-        <PopupHandler />
+        <CartProvider>
+          <LoginChecker />
+          <PopupHandler />
 
-        <RouterProvider router={router} />
+          <RouterProvider router={router} />
+        </CartProvider>
       </PopupProvider>
     </LoginProvider>
   </StrictMode>

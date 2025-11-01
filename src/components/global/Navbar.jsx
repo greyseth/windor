@@ -10,17 +10,17 @@ const navItems = [
   {
     label: "Home",
     icon: { neutral: homeIcon, selected: homeIcon_selected },
-    route: "/",
+    route: "/app",
   },
   {
     label: "Explore",
     icon: { neutral: exploreIcon, selected: exploreIcon },
-    route: "/stores",
+    route: "/app/stores",
   },
   {
     label: "Profile",
     icon: { neutral: personIcon, selected: personIcon_selected },
-    route: "/profile",
+    route: "/app/profile",
   },
 ];
 
@@ -34,11 +34,7 @@ export default function Navbar() {
       <div className="top shadow"></div>
       <div className="bottom">
         {navItems.map((n, i) => {
-          const pathname =
-            location.pathname === "/app"
-              ? "/"
-              : location.pathname.split("/app")[1];
-          const selected = pathname === n.route;
+          const selected = location.pathname === n.route;
           return (
             <button
               key={i}

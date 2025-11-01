@@ -1,7 +1,7 @@
 .navbar {
   --navbar-color: rgb(255, 255, 255);
   position: relative;
-  z-index: 40;
+  z-index: 20;
 }
 
 .navbar .top {
@@ -51,6 +51,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.25em;
+  transition: 0.15s;
 }
 .navbar .bottom > button:nth-child(2) > img {
   transform: scale(150%) translateY(-30%);
