@@ -1,0 +1,17 @@
+.banner-transition {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.banner-transition .gradient {
+  width: 100%;
+  height: 10vh;
+  transform: translateY(-100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(255, 255, 255, 1) 80%
+  );
+  z-index: 20;
+}
