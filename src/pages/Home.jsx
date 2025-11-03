@@ -7,10 +7,21 @@ import starIcon from "../assets/icons/icon_star_white.svg";
 import bannerImage from "../assets/img/landing_banner.jpeg";
 import testImg from "../assets/img/img_testing.png";
 import TextInput from "../components/TextInput";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import ExtraPageContainer from "../components/ExtraPageContainer";
 
 export default function Home() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   return (
     <>
+      {location.pathname.includes("/wincoins") ? (
+        <ExtraPageContainer>
+          <Outlet />
+        </ExtraPageContainer>
+      ) : null}
+
       {/* Floating Search Bar */}
       <div className="w-full p-4 fixed top-0 left-0">
         <TextInput
@@ -28,7 +39,10 @@ export default function Home() {
       <div className="w-full p-4">
         {/* Wincoin Shortcuts */}
         <div className="w-full p-2 rounded-lg shadow-lg grid grid-cols-[1fr_2px_1fr] text-(--primary-color)">
-          <div className="flex items-center justify-evenly">
+          <div
+            className="flex items-center justify-evenly"
+            onClick={() => navigate("/app/wincoins")}
+          >
             <div className="flex flex-col justify-between items-center gap-1">
               <img src={walletIcon} />
               <p className="text-xs">Wincoins</p>

@@ -16,6 +16,9 @@ import Explore from "./pages/Explore.jsx";
 import Store from "./pages/Store.jsx";
 import CartProvider from "./providers/CartProvider.jsx";
 import Checkout from "./pages/Checkout.jsx";
+import SearchProvider from "./providers/SearchProvider.jsx";
+import Wincoins from "./pages/Wincoins.jsx";
+import PopscreenProvider from "./providers/PopscreenProvider.jsx";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +32,12 @@ const router = createBrowserRouter([
       {
         path: "/app",
         element: <Home />,
+        children: [
+          {
+            path: "/app/wincoins",
+            element: <Wincoins />,
+          },
+        ],
       },
       {
         path: "/app/profile",
@@ -66,12 +75,16 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <LoginProvider>
       <PopupProvider>
-        <CartProvider>
-          <LoginChecker />
-          <PopupHandler />
+        <PopscreenProvider>
+          <SearchProvider>
+            <CartProvider>
+              <LoginChecker />
+              <PopupHandler />
 
-          <RouterProvider router={router} />
-        </CartProvider>
+              <RouterProvider router={router} />
+            </CartProvider>
+          </SearchProvider>
+        </PopscreenProvider>
       </PopupProvider>
     </LoginProvider>
   </StrictMode>
