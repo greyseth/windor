@@ -6,13 +6,16 @@ import testImage from "../assets/img/img_testing.png";
 import StoreItems from "../components/StoreItems";
 
 import TextInput from "../components/TextInput";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import ExtraPageContainer from "../components/ExtraPageContainer";
 import { CartContext } from "../providers/CartProvider";
 
 export default function Explore() {
   const { cart, setCart } = useContext(CartContext);
+
+  const { id_store } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const exploreContainer = useRef(undefined);
 
@@ -61,9 +64,16 @@ export default function Explore() {
         </ExtraPageContainer>
       ) : null}
 
-      {cart.length > 0 ? (
+      {cart.length > 0 &&
+      !location.pathname.includes("/checkout") &&
+      id_store ? (
         <div className="checkout">
-          <button className="btn w-full primary rounded-full flex-col gap-0.5">
+          <button
+            className="btn w-full primary rounded-full flex-col gap-0.5"
+            onClick={() => {
+              if (id_store) navigate("/app/stores/" + id_store + "/checkout");
+            }}
+          >
             <p className="text-center text-xs">
               {cart.length} Items - Rp.{" "}
               {Intl.NumberFormat("en-ID").format(

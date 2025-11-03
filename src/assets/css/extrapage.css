@@ -7,7 +7,7 @@
   top: 0;
 
   background-color: white;
-  overflow-y: auto;
+  overflow-y: clip;
 
   animation: extrapage-in 1 forwards normal 0.5s;
 }

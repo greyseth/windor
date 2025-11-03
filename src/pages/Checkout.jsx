@@ -1,0 +1,209 @@
+import plusIcon from "../assets/icons/icon_plus_primary.svg";
+import minusIcon from "../assets/icons/icon_minus_primary.svg";
+import moneyIcon from "../assets/icons/icon_money_primary.svg";
+import clockIcon from "../assets/icons/icon_clock_primary.svg";
+import discountIcon from "../assets/icons/icon_discount_primary.svg";
+
+import testImg from "../assets/img/img_testing.png";
+
+import { useNavigate, useParams } from "react-router-dom";
+import backIcon from "../assets/icons/icon_back.svg";
+import { useContext, useEffect, useState } from "react";
+import { CartContext } from "../providers/CartProvider";
+import { PopupContext } from "../providers/PopupProvider";
+
+export default function Checkout() {
+  const { cart, setCart } = useContext(CartContext);
+  const { popup, setPopup } = useContext(PopupContext);
+
+  const { id_store } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (cart.filter((c) => c.id_store === id_store).length < 1) {
+      navigate("/app/stores/" + id_store);
+      return setPopup({
+        type: "error",
+        title: "Invalid Action",
+        message: "Cart is empty",
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (cart.filter((c) => c.id_store === id_store).length < 1)
+      navigate("/app/stores/" + id_store);
+  }, [cart]);
+
+  return (
+    <>
+      <div className="flex justify-between items-center bg-white border-b-2 border-b-black shadow-lg p-2 sticky top-0 z-20">
+        <img
+          src={backIcon}
+          onClick={() => navigate("/app/stores/" + id_store)}
+        />
+        <h2 className="text-(--primary-color) font-bold">Checkout Order</h2>
+        <div></div>
+      </div>
+
+      <div className="w-full p-4 space-y-8">
+        <div className="bg-white rounded-2xl shadow-lg p-4 w-full">
+          <p className="font-bold mb-4">Order Items</p>
+          <ul className="w-full space-y-4">
+            {cart
+              .filter((c) => c.id_store === id_store)
+              .map((c, i) => (
+                <>
+                  <li className="w-full grid grid-cols-[1fr_40%]">
+                    <div>
+                      <p className="font-bold">{c.name}</p>
+                      <p className="text-sm text-gray-500/80">
+                        Rp. {Intl.NumberFormat("en-ID").format(c.price)}
+                      </p>
+
+                      <div className="my-4"></div>
+
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={minusIcon}
+                          onClick={() =>
+                            setCart((prevCart) => {
+                              let pc = prevCart.map((item) =>
+                                item.id_menu === c.id_menu
+                                  ? item.amount === 1
+                                    ? null
+                                    : { ...item, amount: item.amount - 1 }
+                                  : item
+                              );
+
+                              pc = pc.filter((i) => i != null);
+
+                              return pc;
+                            })
+                          }
+                        />
+                        <p>{c.amount}</p>
+                        <img
+                          src={plusIcon}
+                          onClick={() => {
+                            setCart((prevCart) =>
+                              prevCart.map((item) =>
+                                item.id_menu === c.id_menu
+                                  ? { ...item, amount: item.amount + 1 }
+                                  : item
+                              )
+                            );
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <textarea
+                      className="p-2 rounded-md bg-gray-200 placeholder:text-gray-800 outline-none text-sm"
+                      placeholder="Add Notes..."
+                      value={c.notes ?? ""}
+                      onChange={(e) =>
+                        setCart((prevCart) => {
+                          let cartCopy = [...prevCart];
+                          cartCopy[
+                            cartCopy.findIndex((cp) => cp.id_menu === c.id_menu)
+                          ].notes = e.target.value;
+
+                          return cartCopy;
+                        })
+                      }
+                    ></textarea>
+                  </li>
+                  {i ===
+                  cart.filter((c) => c.id_store === id_store).length -
+                    1 ? null : (
+                    <div className="w-full h-0.5 bg-gray-500"></div>
+                  )}
+                </>
+              ))}
+          </ul>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-lg p-4 w-full space-y-4">
+          <p className="font-bold mb-4">Payment & Pickup</p>
+
+          <div className="flex items-center gap-4">
+            <img src={moneyIcon} />
+            <select className="basis-0 grow outline-none">
+              <option>Payment Method</option>
+              <option>Cash</option>
+              <option>Wincoins</option>
+            </select>
+          </div>
+          <div className="flex items-center gap-4">
+            <img src={clockIcon} />
+            <select className="basis-0 grow outline-none">
+              <option>Pick Up Now</option>
+            </select>
+          </div>
+          <div className="flex items-center gap-4">
+            <img src={discountIcon} />
+            <select className="basis-0 grow outline-none">
+              <option>Apply Coupon</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-lg p-4 w-full space-y-4">
+          <p className="font-bold mb-4">Order Summary</p>
+          {cart
+            .filter((c) => c.id_store === id_store)
+            .map((c) => (
+              <div className="flex justify-between items-center">
+                <p>
+                  {c.amount}x {c.name}
+                </p>
+                <p>Rp. {Intl.NumberFormat("en-ID").format(c.price)}</p>
+              </div>
+            ))}
+          ``
+          <div className="w-full h-0.5 bg-black"></div>
+          <div className="flex justify-between items-center">
+            <p>Subtotal</p>
+            <p>
+              Rp.{" "}
+              {Intl.NumberFormat("en-ID").format(
+                cart
+                  .filter((c) => c.id_store === id_store)
+                  .reduce((sum, c) => sum + c.price * c.amount, 0)
+              )}
+            </p>
+          </div>
+          <div className="flex justify-between items-center">
+            <p>Discount</p>
+            <p>Rp. 0</p>
+          </div>
+          <div className="flex justify-between items-center">
+            <p>Dorpoints</p>
+            <p>+0</p>
+          </div>
+          <div className="w-full h-0.5 bg-black"></div>
+          <div className="flex justify-between items-center">
+            <p>Total</p>
+            <p>
+              Rp.{" "}
+              {Intl.NumberFormat("en-ID").format(
+                cart
+                  .filter((c) => c.id_store === id_store)
+                  .reduce((sum, c) => sum + c.price * c.amount, 0)
+              )}
+            </p>
+          </div>
+          <div className="flex justify-between items-center">
+            <p>Payment</p>
+            <p>WINCOINS</p>
+          </div>
+        </div>
+
+        <p className="text-center text-(--primary-color) mb-0">
+          Double check your order before confirming!
+        </p>
+        <button className="btn primary full">Confirm Checkout</button>
+      </div>
+    </>
+  );
+}

@@ -15,6 +15,7 @@ import Profile from "./pages/Profile.jsx";
 import Explore from "./pages/Explore.jsx";
 import Store from "./pages/Store.jsx";
 import CartProvider from "./providers/CartProvider.jsx";
+import Checkout from "./pages/Checkout.jsx";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,12 @@ const router = createBrowserRouter([
           {
             path: "/app/stores/:id_store",
             element: <Store />,
+            children: [
+              {
+                path: "/app/stores/:id_store/checkout",
+                element: <Checkout />,
+              },
+            ],
           },
         ],
       },

@@ -12,18 +12,20 @@ import menuIcon from "../assets/icons/icon_menu_primary.svg";
 import thumbsIcon from "../assets/icons/icon_thumbs_primary.svg";
 
 import { useContext, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import searchIcon from "../assets/icons/icon_search.svg";
 import TextInput from "../components/TextInput";
 import LoadingError from "../components/LoadingError";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { CartContext } from "../providers/CartProvider";
+import ExtraPageContainer from "../components/ExtraPageContainer";
 
 export default function Store() {
   const carousel = useRef(undefined);
   const desc = useRef(undefined);
 
-  const [id_store] = useParams();
+  const { id_store } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
 
   const { cart, setCart } = useContext(CartContext);
@@ -183,7 +185,15 @@ export default function Store() {
 
   return (
     <>
-      <div className="flex justify-between items-center bg-white border-b-2 border-b-black shadow-lg p-2 sticky top-0 z-50">
+      {location.pathname
+        .split("/app/stores/" + id_store)[1]
+        .includes("/checkout") ? (
+        <ExtraPageContainer zIndex={50}>
+          <Outlet />
+        </ExtraPageContainer>
+      ) : null}
+
+      <div className="flex justify-between items-center bg-white border-b-2 border-b-black shadow-lg p-2 sticky top-0 z-20">
         <img src={backIcon} onClick={() => navigate("/app/stores")} />
         <h2 className="text-(--primary-color) font-bold">Viewing Store</h2>
         <div></div>
@@ -333,6 +343,8 @@ export default function Store() {
 }
 
 function MenuList({ menuItems, cart, setCart, fetchMenu }) {
+  const { id_store } = useParams();
+
   return (
     <ul>
       {menuItems.length < 1 ? (
@@ -359,7 +371,10 @@ function MenuList({ menuItems, cart, setCart, fetchMenu }) {
                 <button
                   className="btn primary rounded text-xs p-1"
                   onClick={() =>
-                    setCart((prevCart) => [...prevCart, { ...m, amount: 1 }])
+                    setCart((prevCart) => [
+                      ...prevCart,
+                      { ...m, amount: 1, id_store: id_store },
+                    ])
                   }
                 >
                   Order
