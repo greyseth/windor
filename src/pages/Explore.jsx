@@ -143,12 +143,18 @@ export default function Explore() {
 }
 
 function MiniSearchbar({ closing }) {
+  const { search, setSearch } = useContext(SearchContext);
+  const navigate = useNavigate();
+
   return (
     <div className={`mini-searchbar ${closing ? "out" : ""}`}>
       <TextInput
         placeholder={"Search vendors..."}
         img={searchIcon}
-        customStyle={"bg-white border-2 border-(--primary-color)"}
+        customStyle={"bg-white border-2 border-(--primary-color) !text-black"}
+        value={search.query}
+        onChange={(v) => setSearch({ ...search, query: v })}
+        onEnter={() => navigate("/app/stores/search")}
       />
     </div>
   );
