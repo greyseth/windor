@@ -13,8 +13,10 @@ import { useContext } from "react";
 import { PopscreenContext } from "../providers/PopscreenProvider";
 import Popscreen_Topup from "../components/popscreen/Popscreen_Topup";
 import Popscreen_Transfer from "../components/popscreen/Popscreen_Transfer";
+import { SearchContext } from "../providers/SearchProvider";
 
 export default function Home() {
+  const { search, setSearch } = useContext(SearchContext);
   const { popscreen, setPopscreen } = useContext(PopscreenContext);
   const location = useLocation();
   const navigate = useNavigate();
@@ -32,7 +34,10 @@ export default function Home() {
         <TextInput
           placeholder={"What to eat?"}
           img={searchIcon}
-          customStyle={"bg-white border-2 border-(--primary-color)"}
+          customStyle={"bg-white border-2 border-(--primary-color) !text-black"}
+          value={search.query}
+          onChange={(v) => setSearch({ ...search, query: v })}
+          onEnter={() => navigate("/app/stores/search")}
         />
       </div>
 

@@ -22,6 +22,7 @@ import PopscreenProvider from "./providers/PopscreenProvider.jsx";
 import PopscreenHandler from "./components/global/PopscreenHandler.jsx";
 import Transactions from "./pages/Transactions.jsx";
 import Receipt from "./pages/Receipt.jsx";
+import StoreSearch from "./pages/StoreSearch.jsx";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
         path: "/app/stores",
         element: <Explore />,
         children: [
+          {
+            path: "/app/stores/search",
+            element: <StoreSearch />,
+          },
           {
             path: "/app/stores/:id_store",
             element: <Store />,

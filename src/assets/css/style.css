@@ -22,7 +22,7 @@
   @apply bg-gray-400/60;
 }
 .textinput > input {
-  @apply placeholder:text-sm placeholder:text-black/50 basis-0 grow text-white;
+  @apply placeholder:text-sm placeholder:text-black/50 basis-0 grow;
 }
 .textinput > input:focus {
   outline: none;

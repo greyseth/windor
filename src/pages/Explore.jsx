@@ -9,9 +9,11 @@ import TextInput from "../components/TextInput";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import ExtraPageContainer from "../components/ExtraPageContainer";
 import { CartContext } from "../providers/CartProvider";
+import { SearchContext } from "../providers/SearchProvider";
 
 export default function Explore() {
   const { cart, setCart } = useContext(CartContext);
+  const { search, setSearch } = useContext(SearchContext);
 
   const { id_store } = useParams();
   const location = useLocation();
@@ -100,7 +102,12 @@ export default function Explore() {
             <TextInput
               placeholder={"Search vendors"}
               img={searchIcon}
-              customStyle={"bg-white border-2 border-(--primary-color)"}
+              customStyle={
+                "bg-white border-2 border-(--primary-color) !text-black"
+              }
+              value={search.query}
+              onChange={(v) => setSearch({ ...search, query: v })}
+              onEnter={() => navigate("/app/stores/search")}
             />
             <div className="filters">
               <select className="dropdown">
