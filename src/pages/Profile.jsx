@@ -6,8 +6,14 @@ import starIcon from "../assets/icons/icon_star.svg";
 import testImg from "../assets/img/img_testing.png";
 
 import TextInput from "../components/TextInput";
+import { useContext } from "react";
+import { PopupContext } from "../providers/PopupProvider";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
+  const { popup, setPopup } = useContext(PopupContext);
+  const navigate = useNavigate();
+
   return (
     <div className="profile-container">
       {/* Profile Details */}
@@ -29,14 +35,37 @@ export default function Profile() {
           <TextInput placeholder={"Email"} customStyle={"text-xs bg-white"} />
         </div>
         <div>
-          <button className="btn red smaller noshadow text-sm w-full">
+          <button
+            className="btn red smaller noshadow text-sm w-full"
+            onClick={() =>
+              setPopup({
+                type: "notice",
+                title: "Confirmation",
+                message:
+                  "Are you sure you want to log out of your account? You're going to have to enter your credentials again",
+                buttons: [
+                  {
+                    label: "Yes",
+                    onClick: () => {},
+                  },
+                  {
+                    label: "No",
+                    onClick: () => {},
+                  },
+                ],
+              })
+            }
+          >
             LOG OUT
           </button>
         </div>
       </div>
 
       <div className="p-4">
-        <button className="btn primary w-full">
+        <button
+          className="btn primary w-full"
+          onClick={() => navigate("/app/transactions")}
+        >
           <img src={orderIcon} />
           <p>Order History</p>
         </button>

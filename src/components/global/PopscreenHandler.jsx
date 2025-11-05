@@ -8,8 +8,9 @@ export default function PopscreenHandler() {
     <>
       {popscreen && popscreen.element ? (
         <section
-          className="w-full h-screen fixed left-0 top-0 bg-gray-500/70 p-8"
+          className="w-full h-screen fixed left-0 top-0 bg-gray-500/70 p-8 flex justify-center items-center"
           style={{ zIndex: popscreen.zIndex ?? 40 }}
+          onClick={() => setPopscreen(undefined)}
         >
           {popscreen.element}
         </section>

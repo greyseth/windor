@@ -1,0 +1,24 @@
+.translist-open {
+  animation: translist-open 1 0.5s forwards normal;
+}
+.translist-close {
+  animation: translist-close 1 0.5s forwards normal;
+}
+
+@keyframes translist-open {
+  from {
+    height: 0px;
+  }
+  to {
+    height: fit-content;
+  }
+}
+
+@keyframes translist-close {
+  from {
+    height: fit-content;
+  }
+  to {
+    height: 0px;
+  }
+}

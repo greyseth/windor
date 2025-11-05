@@ -4,8 +4,13 @@ import topupIcon from "../assets/icons/icon_topup_primary.svg";
 import transferIcon from "../assets/icons/icon_transfer_primary.svg";
 import targetIcon from "../assets/icons/icon_target_primary.svg";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { PopscreenContext } from "../providers/PopscreenProvider";
+import Popscreen_Topup from "../components/popscreen/Popscreen_Topup";
+import Popscreen_Transfer from "../components/popscreen/Popscreen_Transfer";
 
 export default function Wincoins() {
+  const { popscreen, setPopscreen } = useContext(PopscreenContext);
   const navigate = useNavigate();
 
   return (
@@ -38,13 +43,19 @@ export default function Wincoins() {
         </div>
         <div className="grid grid-rows-2">
           <div className="p-4">
-            <button className="btn bg-white full">
+            <button
+              className="btn bg-white full"
+              onClick={() => setPopscreen({ element: <Popscreen_Topup /> })}
+            >
               <img src={topupIcon} />
               <p className="text-(--primary-color)">Top Up</p>
             </button>
           </div>
           <div className="p-4">
-            <button className="btn bg-white full">
+            <button
+              className="btn bg-white full"
+              onClick={() => setPopscreen({ element: <Popscreen_Transfer /> })}
+            >
               <img src={transferIcon} />
               <p className="text-(--primary-color)">Transfer</p>
             </button>

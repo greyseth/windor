@@ -5,13 +5,27 @@ import testImg2 from "../assets/img/img_testing2.jpg";
 import testImg3 from "../assets/img/img_testing3.jpg";
 import testImg4 from "../assets/img/img_testing4.png";
 
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { LoginContext } from "../providers/LoginProvider";
 import { useNavigate } from "react-router-dom";
 
 export default function Landing() {
   const { loginToken, setLoginToken } = useContext(LoginContext);
+  const bubblesRef = useRef([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const el = bubblesRef.current;
+    if (!el) return;
+
+    for (let i = 0; i < el.length; i++) {
+      const bubble = el[i];
+      setTimeout(() => {
+        if (!bubble) return;
+        bubble.classList.add("in");
+      }, i * 100);
+    }
+  }, []);
 
   return (
     <>
@@ -37,7 +51,10 @@ export default function Landing() {
 
         <div className="h-8"></div>
 
-        <div className="bg-(--primary-color) rounded-xl p-4 flex flex-col gap-4">
+        <div
+          className="bg-(--primary-color) rounded-xl p-4 flex flex-col gap-4 bubble"
+          ref={(ref) => (bubblesRef.current[0] = ref)}
+        >
           <img
             src={testImg1}
             className="w-full h-auto aspect-video rounded-lg object-cover"
@@ -51,7 +68,10 @@ export default function Landing() {
           </div>
         </div>
 
-        <div className="bg-(--primary-color) rounded-xl p-4 flex flex-col gap-4">
+        <div
+          className="bg-(--primary-color) rounded-xl p-4 flex flex-col gap-4 bubble"
+          ref={(ref) => (bubblesRef.current[1] = ref)}
+        >
           <img
             src={testImg2}
             className="w-full h-auto aspect-video rounded-lg object-cover"
@@ -62,7 +82,10 @@ export default function Landing() {
           </div>
         </div>
 
-        <div className="bg-(--primary-color) rounded-xl p-4 flex flex-col gap-4">
+        <div
+          className="bg-(--primary-color) rounded-xl p-4 flex flex-col gap-4 bubble"
+          ref={(ref) => (bubblesRef.current[2] = ref)}
+        >
           <img
             src={testImg3}
             className="w-full h-auto aspect-video rounded-lg object-cover"

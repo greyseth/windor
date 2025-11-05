@@ -9,8 +9,13 @@ import testImg from "../assets/img/img_testing.png";
 import TextInput from "../components/TextInput";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import ExtraPageContainer from "../components/ExtraPageContainer";
+import { useContext } from "react";
+import { PopscreenContext } from "../providers/PopscreenProvider";
+import Popscreen_Topup from "../components/popscreen/Popscreen_Topup";
+import Popscreen_Transfer from "../components/popscreen/Popscreen_Transfer";
 
 export default function Home() {
+  const { popscreen, setPopscreen } = useContext(PopscreenContext);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -52,11 +57,17 @@ export default function Home() {
           </div>
           <div className="h-full bg-gray-500"></div>
           <div className="flex items-center justify-evenly">
-            <div className="flex flex-col justify-between items-center gap-1">
+            <div
+              className="flex flex-col justify-between items-center gap-1"
+              onClick={() => setPopscreen({ element: <Popscreen_Topup /> })}
+            >
               <img src={topupIcon} />
               <p className="text-xs">Top-Up</p>
             </div>
-            <div className="flex flex-col justify-between items-center gap-1">
+            <div
+              className="flex flex-col justify-between items-center gap-1"
+              onClick={() => setPopscreen({ element: <Popscreen_Transfer /> })}
+            >
               <img src={transferIcon} />
               <p className="text-xs">Transfer</p>
             </div>

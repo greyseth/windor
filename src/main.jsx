@@ -19,6 +19,9 @@ import Checkout from "./pages/Checkout.jsx";
 import SearchProvider from "./providers/SearchProvider.jsx";
 import Wincoins from "./pages/Wincoins.jsx";
 import PopscreenProvider from "./providers/PopscreenProvider.jsx";
+import PopscreenHandler from "./components/global/PopscreenHandler.jsx";
+import Transactions from "./pages/Transactions.jsx";
+import Receipt from "./pages/Receipt.jsx";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +45,13 @@ const router = createBrowserRouter([
       {
         path: "/app/profile",
         element: <Profile />,
+      },
+      {
+        path: "/app/transactions",
+        element: <Transactions />,
+        children: [
+          { path: "/app/transactions/:id_order", element: <Receipt /> },
+        ],
       },
       {
         path: "/app/stores",
@@ -80,6 +90,7 @@ createRoot(document.getElementById("root")).render(
             <CartProvider>
               <LoginChecker />
               <PopupHandler />
+              <PopscreenHandler />
 
               <RouterProvider router={router} />
             </CartProvider>

@@ -15,3 +15,22 @@
   );
   z-index: 20;
 }
+
+.bubble {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.bubble.in {
+  animation: bubble-in 1s forwards normal 1;
+}
+
+@keyframes bubble-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
