@@ -1,0 +1,48 @@
+import starIcon from "../../assets/icons/icon_star.svg";
+import starIconWhite from "../../assets/icons/icon_star_white.svg";
+
+import { useContext, useEffect, useState } from "react";
+import { PopscreenContext } from "../../providers/PopscreenProvider";
+
+export default function Popscreen_ReviewWrite() {
+  const { popscreen, setPopscreen } = useContext(PopscreenContext);
+
+  const [review, setReview] = useState({ content: "", stars: 5 });
+
+  return (
+    <div
+      className="w-full p-4 rounded-xl bg-white"
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
+      <h2 className="font-bold text-xl text-(--primary-color) text-center">
+        Write a Review
+      </h2>
+
+      <div className="my-4"></div>
+
+      <div className="flex items-center justify-center gap-3 w-full p-2 bg-gray-400/45 rounded-md">
+        {[...Array(5)].map((_, i) => (
+          <img
+            src={i <= review.stars ? starIcon : starIconWhite}
+            onClick={() => setReview({ ...review, stars: i })}
+          />
+        ))}
+      </div>
+
+      <div className="my-4"></div>
+
+      <textarea
+        className="w-full p-2 bg-gray-400/45 placeholder:text-gray-400 text-black min-h-32 outline-0 rounded-md"
+        placeholder="Describe your experience"
+        value={review.content}
+        onChange={(e) => setReview({ ...review, content: e.target.value })}
+      ></textarea>
+
+      <button className="btn smaller primary full mt-4">Add Your Review</button>
+      <button className="btn smaller red full mt-4">Cancel</button>
+    </div>
+  );
+}

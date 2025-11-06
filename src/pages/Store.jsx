@@ -10,6 +10,7 @@ import personIcon from "../assets/icons/icon_profile_primary.svg";
 import locationIcon from "../assets/icons/icon_location_primary.svg";
 import menuIcon from "../assets/icons/icon_menu_primary.svg";
 import thumbsIcon from "../assets/icons/icon_thumbs_primary.svg";
+import starIcon from "../assets/icons/icon_star.svg";
 
 import { useContext, useEffect, useRef, useState } from "react";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
@@ -19,6 +20,8 @@ import LoadingError from "../components/LoadingError";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { CartContext } from "../providers/CartProvider";
 import ExtraPageContainer from "../components/ExtraPageContainer";
+import { PopscreenContext } from "../providers/PopscreenProvider";
+import Popscreen_Reviews from "../components/popscreen/Popscreen_Reviews";
 
 export default function Store() {
   const carousel = useRef(undefined);
@@ -29,6 +32,7 @@ export default function Store() {
   const navigate = useNavigate();
 
   const { cart, setCart } = useContext(CartContext);
+  const { popscreen, setPopscreen } = useContext(PopscreenContext);
 
   const [store, setStore] = useState({
     loading: true,
@@ -37,6 +41,8 @@ export default function Store() {
       description:
         "This whimsical placeholder description fills space and demonstrates layout when real content is unavailable. It mentions fictional products, friendly service, and a welcoming atmosphere while remaining generic enough to be replaced. Our imaginary shop offers a diverse selection of handcrafted goods, clever gadgets, and thoughtful gifts, presented with clean visuals and concise copy to inspire confidence. Use this realistic but neutral example to preview user flows, test styles, and evaluate spacing without relying on actual store data or imagery today.",
       address: "Earth 1st Yes Over hEre not there",
+      rating: 5,
+      review_count: 2,
       username: "Benjamin",
       media: [testImg1, testImg2, testImg3, testImg4],
     },
@@ -221,10 +227,26 @@ export default function Store() {
 
       <div className="w-full p-4 space-y-3">
         <h2 className="text-lg font-bold">{store.data.name}</h2>
+        <div
+          className="flex justify-between"
+          onClick={() =>
+            setPopscreen({ element: <Popscreen_Reviews />, id_store: id_store })
+          }
+        >
+          <div className="flex items-center gap-1">
+            {[...Array(store.data.rating)].map((_, i) => (
+              <img src={starIcon} />
+            ))}
+          </div>
+          <p className="text-sm text-gray-500 underline">
+            See Reviews ({store.data.review_count})
+          </p>
+        </div>
         <div className="flex items-center gap-4">
           <img src={personIcon} />
           <p>{store.data.username}</p>
         </div>
+
         <p
           ref={desc}
           className={`${
