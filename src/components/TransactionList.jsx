@@ -3,6 +3,8 @@ import dropdownIcon from "../assets/icons/icon_dropdown_black.svg";
 import receiptIcon from "../assets/icons/icon_order.svg";
 import testImg from "../assets/img/img_testing.png";
 import { useNavigate } from "react-router-dom";
+import formatDate from "../util/formatDate";
+import getImage from "../util/getImage";
 
 export default function TransactionList({ label, transactions }) {
   const navigate = useNavigate();
@@ -42,39 +44,68 @@ export default function TransactionList({ label, transactions }) {
             : "h-0 py-0"
         } transition-all duration-200`}
       >
-        <li
-          className="p-2 rounded-lg bg-white shadow-lg"
-          onClick={() => navigate("/app/transactions/1")}
-        >
-          <div className="flex justify-between items-center">
-            <p className="font-bold">RM PADANG</p>
-            <p className="text-sm text-gray-500/80">00/00/0000 00:00</p>
-          </div>
-          <div className="grid grid-cols-[30%_1fr] gap-2 mt-2">
-            <img
-              src={testImg}
-              className="w-full h-auto aspect-square object-cover rounded-lg"
-            />
-            <div>
-              <p className="font-bold">Rp. 500,000</p>
-              <p className="text-gray-500/80 text-sm">5 Items</p>
-              <p>Paid in Cash</p>
-            </div>
-            <p className="text-center my-auto font-bold">PENDING</p>
-            <div className="flex justify-end items-stretch gap-2">
-              <img src={receiptIcon} className="btn primary smaller" />
-              <button
-                className="btn primary smaller"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
-              >
-                Mark as Done
-              </button>
-            </div>
-          </div>
-        </li>
+        {transactions.length > 0 ? (
+          transactions.map((t) => (
+            <li
+              key={t.id_order}
+              className="p-2 rounded-lg bg-white shadow-lg"
+              onClick={() => navigate("/app/transactions/" + t.id_order)}
+            >
+              <div className="flex justify-between items-center gap-2">
+                <p className="font-bold text-sm">{t.store.name}</p>
+                <p className="text-xs text-gray-500/80">
+                  {formatDate(t.order_date)} {t.order_schedule}
+                </p>
+              </div>
+              <div className="grid grid-cols-[30%_1fr] gap-2 mt-2">
+                <img
+                  src={getImage(t.store.thumbnail)}
+                  className="w-full h-auto aspect-square object-cover rounded-lg"
+                />
+                <div>
+                  <p className="font-bold">
+                    Rp. {Intl.NumberFormat("en-ID").format(t.order_price)}
+                  </p>
+                  <p className="text-gray-500/80 text-sm">
+                    {t.order_amount} Items
+                  </p>
+                  <p>Paid in {t.order_payment}</p>
+                </div>
+                <p
+                  className={`text-center my-auto font-bold ${
+                    t.order_status === "DONE"
+                      ? "text-green-400"
+                      : t.order_status === "ACCEPTED"
+                      ? "text-blue-400"
+                      : t.order_status === "CANCELLED"
+                      ? "text-red-400"
+                      : "text-yellow-400"
+                  }`}
+                >
+                  {t.order_status}
+                </p>
+                <div className="flex justify-end items-stretch gap-2">
+                  <img src={receiptIcon} className="btn primary smaller" />
+                  {t.order_status === "ACCEPTED" ? (
+                    <button
+                      className="btn primary smaller"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                    >
+                      Mark as Done
+                    </button>
+                  ) : null}
+                </div>
+              </div>
+            </li>
+          ))
+        ) : (
+          <p className="font-bold text-sm text-center text-gray-500/80">
+            No Transactions to Show
+          </p>
+        )}
       </ul>
     </>
   );

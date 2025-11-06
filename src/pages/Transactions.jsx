@@ -3,11 +3,27 @@ import "../assets/css/transactions.css";
 
 import TransactionList from "../components/TransactionList";
 import ExtraPageContainer from "../components/ExtraPageContainer";
-import Receipt from "./Receipt";
+import { useEffect, useState } from "react";
+import request from "../util/API";
+import LoadingError from "../components/LoadingError";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function Transactions() {
   const { id_order } = useParams();
   const location = useLocation();
+
+  const [transactions, setTransactions] = useState({ loading: true, data: [] });
+
+  async function fetchTransactions() {
+    const response = await request("GET", "/order");
+    if (!response || response.error)
+      return setTransactions({ ...transactions, error: true });
+    setTransactions({ loading: false, data: response });
+  }
+
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
 
   return (
     <>
@@ -21,9 +37,32 @@ export default function Transactions() {
         My Transactions
       </p>
 
-      <TransactionList label={"Pending Transactions"} />
-      <TransactionList label={"Accepted/Cancelled Orders"} />
-      <TransactionList label={"All Transactions"} />
+      {transactions.loading ? (
+        transactions.error ? (
+          <LoadingError onRetry={fetchTransactions} />
+        ) : (
+          <LoadingSpinner />
+        )
+      ) : (
+        <>
+          <TransactionList
+            label={"Pending Transactions"}
+            transactions={transactions.data.filter(
+              (t) => t.order_status === "PENDING"
+            )}
+          />
+          <TransactionList
+            label={"Accepted/Cancelled Orders"}
+            transactions={transactions.data.filter(
+              (t) => t.order_status !== "PENDING" && t.order_status !== "DONE"
+            )}
+          />
+          <TransactionList
+            label={"All Transactions"}
+            transactions={transactions.data}
+          />
+        </>
+      )}
     </>
   );
 }
