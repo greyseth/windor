@@ -6,14 +6,16 @@ export default function TextInput({
   onEnter,
   img,
   customStyle,
+  readonly,
 }) {
   return (
-    <div className={`textinput text-white bg-gray-400/45 ${customStyle}`}>
+    <div className={`textinput text-black bg-gray-400/45 ${customStyle}`}>
       {img ? <img src={img} /> : null}
       <input
         type={type}
         value={value}
         placeholder={placeholder}
+        readOnly={readonly}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") onEnter();

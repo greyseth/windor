@@ -16,14 +16,13 @@ export default function LoginChecker() {
   async function handleVerifyToken() {
     // Verifies validity of login token
     const response = await request("GET", "/user/verify");
-    // TODO: implement popup alert system
     if (response && response.error) {
       setPopup({
         type: "error",
         title: "Could not verify login credentials",
         message: "Invalid login token",
       });
-      // navigate("/auth"); TODO: remove
+      navigate("/auth");
       return;
     }
 

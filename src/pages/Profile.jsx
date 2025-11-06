@@ -6,60 +6,120 @@ import starIcon from "../assets/icons/icon_star.svg";
 import testImg from "../assets/img/img_testing.png";
 
 import TextInput from "../components/TextInput";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { PopupContext } from "../providers/PopupProvider";
 import { useNavigate } from "react-router-dom";
+import request from "../util/API";
+import LoadingError from "../components/LoadingError";
+import LoadingSpinner from "../components/LoadingSpinner";
+import { LoginContext } from "../providers/LoginProvider";
 
 export default function Profile() {
+  const { loginToken, setLoginToken } = useContext(LoginContext);
   const { popup, setPopup } = useContext(PopupContext);
   const navigate = useNavigate();
+
+  const [credentials, setCredentials] = useState({ loading: true, data: {} });
+
+  async function fetchCredentials() {
+    const response = await request("GET", "/user/verify");
+    if (!response || response.error)
+      return setCredentials({ ...credentials, error: true });
+
+    setCredentials({ ...credentials, loading: false, data: response });
+  }
+
+  useEffect(() => {
+    fetchCredentials();
+  }, []);
 
   return (
     <div className="profile-container">
       {/* Profile Details */}
-      <div className="profile-details">
-        <div className="flex justify-center items-center">
-          <img
-            src={profileIcon}
-            alt="Profile"
-            className="bg-black p-8 rounded-full"
-          />
+      {credentials.loading ? (
+        credentials.error ? (
+          <LoadingError onRetry={fetchCredentials} />
+        ) : (
+          <LoadingSpinner />
+        )
+      ) : (
+        <div className="profile-details">
+          <div className="flex justify-center items-center">
+            <img
+              src={profileIcon}
+              alt="Profile"
+              className="bg-black p-8 rounded-full"
+            />
+          </div>
+          <div>
+            <TextInput
+              placeholder={"Username"}
+              customStyle={"text-xs bg-white"}
+              value={credentials.data.username}
+              onChange={(v) =>
+                setCredentials({
+                  ...credentials,
+                  data: { ...credentials.data, username: v },
+                })
+              }
+              onEnter={async () => {
+                const response = await request("PATCH", "/user", {
+                  username: credentials.data.username,
+                });
+                if (response && response.error)
+                  return setPopup({
+                    type: "error",
+                    title: "An Error has Occurred",
+                    message: "Failed to update username",
+                  });
+
+                setPopup({
+                  type: "success",
+                  title: "Updated Account Details",
+                  message: "Successfully updated username",
+                });
+              }}
+            />
+          </div>
+          <div>
+            <TextInput
+              placeholder={"Email"}
+              customStyle={"text-xs bg-white"}
+              readonly={true}
+              value={credentials.data.email}
+            />
+          </div>
+          <div>
+            <button
+              className="btn red smaller noshadow text-sm w-full"
+              onClick={() =>
+                setPopup({
+                  type: "notice",
+                  title: "Confirmation",
+                  message:
+                    "Are you sure you want to log out of your account? You're going to have to enter your credentials again",
+                  cantIgnore: true,
+                  buttons: [
+                    {
+                      label: "Yes",
+                      onClick: () => {
+                        window.localStorage.removeItem("login_token");
+                        navigate("/auth");
+                      },
+                    },
+                    {
+                      label: "No",
+                      onClick: () => {},
+                    },
+                  ],
+                })
+              }
+            >
+              LOG OUT
+            </button>
+          </div>
         </div>
-        <div>
-          <TextInput
-            placeholder={"Username"}
-            customStyle={"text-xs bg-white"}
-          />
-        </div>
-        <div>
-          <TextInput placeholder={"Email"} customStyle={"text-xs bg-white"} />
-        </div>
-        <div>
-          <button
-            className="btn red smaller noshadow text-sm w-full"
-            onClick={() =>
-              setPopup({
-                type: "notice",
-                title: "Confirmation",
-                message:
-                  "Are you sure you want to log out of your account? You're going to have to enter your credentials again",
-                buttons: [
-                  {
-                    label: "Yes",
-                    onClick: () => {},
-                  },
-                  {
-                    label: "No",
-                    onClick: () => {},
-                  },
-                ],
-              })
-            }
-          >
-            LOG OUT
-          </button>
-        </div>
-      </div>
+      )}
 
       <div className="p-4">
         <button
