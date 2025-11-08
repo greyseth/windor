@@ -3,6 +3,9 @@ import walletIcon from "../assets/icons/icon_wallet_primary.svg";
 import topupIcon from "../assets/icons/icon_topup_primary.svg";
 import transferIcon from "../assets/icons/icon_transfer_primary.svg";
 import targetIcon from "../assets/icons/icon_target_primary.svg";
+
+import bannerImg from "../assets/img/img_wincoins_banner.jpg";
+
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { PopscreenContext } from "../providers/PopscreenProvider";
@@ -21,7 +24,11 @@ export default function Wincoins() {
         <div></div>
       </div>
 
-      <div className="w-full bg-green-600 grid grid-cols-2">
+      <div className="w-full grid grid-cols-2 relative">
+        <img
+          src={bannerImg}
+          className="absolute w-full h-full left-0 top-0 -z-1 object-cover"
+        />
         <div className="p-4">
           <div className="size-full grid grid-rows-[1fr_2px_1fr] gap-2 p-2 rounded-lg bg-white">
             <div className="flex items-center justify-evenly gap-1">

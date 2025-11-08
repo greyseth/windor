@@ -16,6 +16,7 @@ export default function StoreItems({ fetch, label, style, collapse }) {
     loading: true,
     data: [],
   });
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     fetch(stores, setStores);
@@ -41,7 +42,9 @@ export default function StoreItems({ fetch, label, style, collapse }) {
           {stores.data.length > 0 ? (
             <>
               {stores.data
-                .filter((_, i) => (!collapse ? true : i + 1 < collapse.limit))
+                .filter((_, i) =>
+                  !collapse || showMore ? true : i + 1 < collapse.limit
+                )
                 .map((s) =>
                   style === "basic" ? (
                     <Basic
@@ -57,8 +60,13 @@ export default function StoreItems({ fetch, label, style, collapse }) {
                     />
                   )
                 )}
-              {collapse ? (
-                <button className="btn primary full">Show More</button>
+              {collapse && !showMore ? (
+                <button
+                  className="btn primary full"
+                  onClick={() => setShowMore(!showMore)}
+                >
+                  Show More
+                </button>
               ) : null}
             </>
           ) : (
@@ -78,7 +86,7 @@ function Basic({ s, onClick }) {
     >
       <img
         src={getImage(s.thumbnail)}
-        className="rounded-md object-cover aspect-square"
+        className="rounded-md object-cover w-full h-auto aspect-square"
       />
       <div>
         <p>{s.name}</p>
@@ -103,7 +111,7 @@ function Long({ s, onClick }) {
   return (
     <li
       onClick={() => onClick(s)}
-      className="rounded-lg shadow-md w-full grid grid-cols-[40%_1fr] gap-4 storeitem overflow-clip"
+      className="rounded-lg shadow-md min-w-full grid grid-cols-[40%_1fr] gap-4 storeitem overflow-clip"
     >
       <div className="flex justify-center items-center flex-col p-4 text-center">
         <p className="text-sm font-bold">{s.name}</p>

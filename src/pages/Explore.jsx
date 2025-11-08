@@ -183,22 +183,26 @@ export default function Explore() {
           </div>
         </div>
 
-        <StoreItems
-          fetch={async (stores, setStores) => {
-            const response = await request("POST", "/store/find/personal", {});
-            if (!response || response.error)
-              return setStores({ ...stores, error: true });
-            setStores({ loading: false, data: response });
-          }}
-          label={"Based on your recent orders"}
-          style={"long"}
-        />
+        {window.localStorage.getItem("login_token") ? (
+          <StoreItems
+            fetch={async (stores, setStores) => {
+              const response = await request(
+                "POST",
+                "/store/find/personal",
+                {}
+              );
+              if (!response || response.error)
+                return setStores({ ...stores, error: true });
+              setStores({ loading: false, data: response });
+            }}
+            label={"Based on your recent orders"}
+            style={"long"}
+          />
+        ) : null}
 
         <StoreItems
           fetch={async (stores, setStores) => {
-            const response = await request("POST", "/store/find", {
-              limit: 3,
-            });
+            const response = await request("POST", "/store/find", {});
             if (!response || response.error)
               return setStores({ ...stores, error: true });
             setStores({ loading: false, data: response });
@@ -210,9 +214,7 @@ export default function Explore() {
 
         <StoreItems
           fetch={async (stores, setStores) => {
-            const response = await request("POST", "/store/find", {
-              limit: 10,
-            });
+            const response = await request("POST", "/store/find", {});
             if (!response || response.error)
               return setStores({ ...stores, error: true });
             setStores({ loading: false, data: response });

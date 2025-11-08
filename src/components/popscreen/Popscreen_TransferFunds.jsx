@@ -34,7 +34,9 @@ export default function Popscreen_TransferFunds() {
       <button className="btn primary full smaller mt-4">Send Funds</button>
       <button
         className="btn red full smaller mt-4"
-        onClick={() => setPopscreen({ element: <Popscreen_Transfer /> })}
+        onClick={() =>
+          setPopscreen({ ...popscreen, element: <Popscreen_Transfer /> })
+        }
       >
         Cancel
       </button>
