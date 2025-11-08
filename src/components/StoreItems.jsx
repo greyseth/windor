@@ -1,57 +1,25 @@
 import starIcon from "../assets/icons/icon_star.svg";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 import LoadingError from "./LoadingError";
 import { useNavigate } from "react-router-dom";
+import getImage from "../util/getImage";
 
 export default function StoreItems({ fetch, label, style, collapse }) {
-  // fetch -> store fetch function
+  // fetch -> store fetch function (defined in component placement, should return result)
   // style -> 'basic', 'long', 'square'
 
   const navigate = useNavigate();
 
   const [stores, setStores] = useState({
-    loading: false,
-    data: [
-      {
-        id_store: 1,
-        name: "RM Padang",
-        rating: 4,
-        price_min: 5000,
-        price_max: 17000,
-        thumbnail:
-          "https://preview.redd.it/tried-to-see-the-simetry-of-the-famous-stock-image-man-v0-i3k94xhqv0ja1.jpg?width=933&format=pjpg&auto=webp&s=677cc06120e617a2f42dff20d04e5769a566a510",
-      },
-      {
-        id_store: 2,
-        name: "RM Padang",
-        rating: 4,
-        price_min: 5000,
-        price_max: 17000,
-        thumbnail:
-          "https://preview.redd.it/tried-to-see-the-simetry-of-the-famous-stock-image-man-v0-i3k94xhqv0ja1.jpg?width=933&format=pjpg&auto=webp&s=677cc06120e617a2f42dff20d04e5769a566a510",
-      },
-      {
-        id_store: 3,
-        name: "RM Padang",
-        rating: 4,
-        price_min: 5000,
-        price_max: 17000,
-        thumbnail:
-          "https://preview.redd.it/tried-to-see-the-simetry-of-the-famous-stock-image-man-v0-i3k94xhqv0ja1.jpg?width=933&format=pjpg&auto=webp&s=677cc06120e617a2f42dff20d04e5769a566a510",
-      },
-      {
-        id_store: 4,
-        name: "RM Padang",
-        rating: 4,
-        price_min: 5000,
-        price_max: 17000,
-        thumbnail:
-          "https://preview.redd.it/tried-to-see-the-simetry-of-the-famous-stock-image-man-v0-i3k94xhqv0ja1.jpg?width=933&format=pjpg&auto=webp&s=677cc06120e617a2f42dff20d04e5769a566a510",
-      },
-    ],
+    loading: true,
+    data: [],
   });
+
+  useEffect(() => {
+    fetch(stores, setStores);
+  }, []);
 
   return (
     <>
@@ -73,15 +41,17 @@ export default function StoreItems({ fetch, label, style, collapse }) {
           {stores.data.length > 0 ? (
             <>
               {stores.data
-                .filter((_, i) => (!collapse ? true : i + 1 <= collapse.limit))
+                .filter((_, i) => (!collapse ? true : i + 1 < collapse.limit))
                 .map((s) =>
                   style === "basic" ? (
                     <Basic
+                      key={s.id_store}
                       s={s}
                       onClick={(s) => navigate(`/app/stores/${s.id_store}`)}
                     />
                   ) : (
                     <Long
+                      key={s.id_store}
                       s={s}
                       onClick={(s) => navigate(`/app/stores/${s.id_store}`)}
                     />
@@ -103,20 +73,26 @@ export default function StoreItems({ fetch, label, style, collapse }) {
 function Basic({ s, onClick }) {
   return (
     <li
-      key={s.id_store}
       onClick={() => onClick(s)}
       className="p-4 rounded-lg shadow-md w-full grid grid-cols-[86px_1fr] gap-4 storeitem"
     >
-      <img src={s.thumbnail} className="rounded-md object-cover" />
+      <img
+        src={getImage(s.thumbnail)}
+        className="rounded-md object-cover aspect-square"
+      />
       <div>
         <p>{s.name}</p>
-        <div className="flex items-center gap-1 my-1">
-          <img src={starIcon} />
-          <p>{s.rating}</p>
-        </div>
+        {s.rating ? (
+          <div className="flex items-center gap-1 my-1">
+            <img src={starIcon} />
+            <p>{s.rating}</p>
+          </div>
+        ) : (
+          <p className="text-sm text-(--secondary-color)">Not enough reviews</p>
+        )}
         <p className="text-sm text-blue-500/60">
-          Rp. {Intl.NumberFormat("en-ID").format(s.price_min)} -- Rp.{" "}
-          {Intl.NumberFormat("en-ID").format(s.price_max)}
+          Rp. {Intl.NumberFormat("en-ID").format(s.min_price)} -- Rp.{" "}
+          {Intl.NumberFormat("en-ID").format(s.max_price)}
         </p>
       </div>
     </li>
@@ -126,12 +102,11 @@ function Basic({ s, onClick }) {
 function Long({ s, onClick }) {
   return (
     <li
-      key={s.id_store}
       onClick={() => onClick(s)}
       className="rounded-lg shadow-md w-full grid grid-cols-[40%_1fr] gap-4 storeitem overflow-clip"
     >
       <div className="flex justify-center items-center flex-col p-4 text-center">
-        <p>{s.name}</p>
+        <p className="text-sm font-bold">{s.name}</p>
         <div className="flex items-center gap-1 my-1">
           <img src={starIcon} />
           <p>{s.rating}</p>
@@ -139,7 +114,7 @@ function Long({ s, onClick }) {
       </div>
       <div className="w-full h-auto aspect-video rounded-md object-cover relative overflow-clip">
         <div className="transparency"></div>
-        <img src={s.thumbnail} className="absolute" />
+        <img src={getImage(s.thumbnail)} className="absolute" />
       </div>
     </li>
   );

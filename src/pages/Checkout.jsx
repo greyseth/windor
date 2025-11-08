@@ -11,6 +11,7 @@ import backIcon from "../assets/icons/icon_back.svg";
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../providers/CartProvider";
 import { PopupContext } from "../providers/PopupProvider";
+import request from "../util/API";
 
 export default function Checkout() {
   const { cart, setCart } = useContext(CartContext);
@@ -18,6 +19,10 @@ export default function Checkout() {
 
   const { id_store } = useParams();
   const navigate = useNavigate();
+
+  const [availableTimes, setAvailableTimes] = useState([]);
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [pickupTime, setPickupTime] = useState("");
 
   useEffect(() => {
     if (cart.filter((c) => c.id_store === id_store).length < 1) {
@@ -28,12 +33,47 @@ export default function Checkout() {
         message: "Cart is empty",
       });
     }
+
+    const now = new Date();
+    const currentHour = now.getHours();
+    const times = [];
+    for (let h = currentHour; h <= 24; h++) {
+      times.push(h === 24 ? "24:00" : `${String(h).padStart(2, "0")}:00`);
+    }
+    setAvailableTimes(times);
   }, []);
 
   useEffect(() => {
     if (cart.filter((c) => c.id_store === id_store).length < 1)
       navigate("/app/stores/" + id_store);
   }, [cart]);
+
+  async function handleOrder() {
+    const response = await request("POST", "/order", {
+      id_store: id_store,
+      order_time: !pickupTime
+        ? undefined
+        : { hour: pickupTime.split(":")[0], minute: pickupTime.split(":")[1] },
+      payment: paymentMethod,
+      orders: cart,
+    });
+
+    if (!response || response.error)
+      return setPopup({
+        type: "error",
+        title: "An Error Occurred",
+        message: "Failed to create order. Try again.",
+      });
+
+    setPopup({
+      type: "success",
+      title: "Created New Order",
+      message: "Successfull created new order transaction",
+    });
+
+    navigate("/app/transactions/" + response.id_order);
+    setCart([]);
+  }
 
   return (
     <>
@@ -128,16 +168,29 @@ export default function Checkout() {
 
           <div className="flex items-center gap-4">
             <img src={moneyIcon} />
-            <select className="basis-0 grow outline-none">
-              <option>Payment Method</option>
-              <option>Cash</option>
-              <option>Wincoins</option>
+            <select
+              className="basis-0 grow outline-none"
+              value={paymentMethod}
+              onChange={(e) => setPaymentMethod(e.target.value)}
+            >
+              <option value={""}>Payment Method</option>
+              <option value={"CASH"}>Cash</option>
+              <option value={"WINCOINS"}>Wincoins</option>
             </select>
           </div>
           <div className="flex items-center gap-4">
             <img src={clockIcon} />
-            <select className="basis-0 grow outline-none">
-              <option>Pick Up Now</option>
+            <select
+              className="basis-0 grow outline-none"
+              value={pickupTime}
+              onChange={(e) => setPickupTime(e.target.value)}
+            >
+              <option value={""}>Pick Up Now</option>
+              {availableTimes.map((a, i) => (
+                <option key={i} value={a}>
+                  {a}
+                </option>
+              ))}
             </select>
           </div>
           <div className="flex items-center gap-4">
@@ -160,7 +213,6 @@ export default function Checkout() {
                 <p>Rp. {Intl.NumberFormat("en-ID").format(c.price)}</p>
               </div>
             ))}
-          ``
           <div className="w-full h-0.5 bg-black"></div>
           <div className="flex justify-between items-center">
             <p>Subtotal</p>
@@ -195,14 +247,16 @@ export default function Checkout() {
           </div>
           <div className="flex justify-between items-center">
             <p>Payment</p>
-            <p>WINCOINS</p>
+            <p>{paymentMethod.toUpperCase()}</p>
           </div>
         </div>
 
         <p className="text-center text-(--primary-color) mb-0">
           Double check your order before confirming!
         </p>
-        <button className="btn primary full">Confirm Checkout</button>
+        <button className="btn primary full" onClick={handleOrder}>
+          Confirm Checkout
+        </button>
       </div>
     </>
   );

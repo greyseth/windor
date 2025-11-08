@@ -22,6 +22,9 @@ import { CartContext } from "../providers/CartProvider";
 import ExtraPageContainer from "../components/ExtraPageContainer";
 import { PopscreenContext } from "../providers/PopscreenProvider";
 import Popscreen_Reviews from "../components/popscreen/Popscreen_Reviews";
+import request from "../util/API";
+import getImage from "../util/getImage";
+import { PopupContext } from "../providers/PopupProvider";
 
 export default function Store() {
   const carousel = useRef(undefined);
@@ -32,128 +35,54 @@ export default function Store() {
   const navigate = useNavigate();
 
   const { cart, setCart } = useContext(CartContext);
+  const { popup, setPopup } = useContext(PopupContext);
   const { popscreen, setPopscreen } = useContext(PopscreenContext);
 
   const [store, setStore] = useState({
     loading: true,
-    data: {
-      name: "This is my store",
-      description:
-        "This whimsical placeholder description fills space and demonstrates layout when real content is unavailable. It mentions fictional products, friendly service, and a welcoming atmosphere while remaining generic enough to be replaced. Our imaginary shop offers a diverse selection of handcrafted goods, clever gadgets, and thoughtful gifts, presented with clean visuals and concise copy to inspire confidence. Use this realistic but neutral example to preview user flows, test styles, and evaluate spacing without relying on actual store data or imagery today.",
-      address: "Earth 1st Yes Over hEre not there",
-      rating: 5,
-      review_count: 2,
-      username: "Benjamin",
-      media: [testImg1, testImg2, testImg3, testImg4],
-    },
+    data: {},
   });
+  const [categories, setCategories] = useState(undefined);
   const [menu, setMenu] = useState({
     loading: false,
-    data: [
-      {
-        id_menu: 1,
-        name: "Fried Rice",
-        price: 15000,
-        category: "Rice",
-        best_seller: false,
-      },
-      {
-        id_menu: 2,
-        name: "Chicken Katsu",
-        price: 28000,
-        category: "Chicken",
-        best_seller: true,
-      },
-      {
-        id_menu: 3,
-        name: "Beef Teriyaki",
-        price: 32000,
-        category: "Japanese",
-        best_seller: false,
-      },
-      {
-        id_menu: 4,
-        name: "Mie Goreng",
-        price: 18000,
-        category: "Noodles",
-        best_seller: false,
-      },
-      {
-        id_menu: 5,
-        name: "Chicken Satay (5 pcs)",
-        price: 22000,
-        category: "Chicken",
-        best_seller: false,
-      },
-      {
-        id_menu: 6,
-        name: "Spicy Ramen",
-        price: 30000,
-        category: "Noodles",
-        best_seller: true,
-      },
-      {
-        id_menu: 7,
-        name: "Onigiri (Salmon)",
-        price: 12000,
-        category: "Japanese",
-        best_seller: false,
-      },
-      {
-        id_menu: 8,
-        name: "Spring Rolls (3 pcs)",
-        price: 9000,
-        category: "Snacks",
-        best_seller: false,
-      },
-      {
-        id_menu: 9,
-        name: "Iced Lemon Tea",
-        price: 8000,
-        category: "Drinks",
-        best_seller: false,
-      },
-      {
-        id_menu: 10,
-        name: "Espresso",
-        price: 10000,
-        category: "Coffee",
-        best_seller: false,
-      },
-      {
-        id_menu: 11,
-        name: "Mango Sticky Rice",
-        price: 25000,
-        category: "Dessert",
-        best_seller: false,
-      },
-      {
-        id_menu: 12,
-        name: "Grilled Corn with Butter",
-        price: 7000,
-        category: "Snacks",
-        best_seller: false,
-      },
-      {
-        id_menu: 13,
-        name: "Chicken Curry with Rice",
-        price: 35000,
-        category: "Rice",
-        best_seller: false,
-      },
-      {
-        id_menu: 14,
-        name: "Matcha Latte",
-        price: 18000,
-        category: "Tea",
-        best_seller: false,
-      },
-    ],
+    data: [],
   });
 
   const [imgIndex, setImgIndex] = useState(0);
   const [descExpand, setDescExpand] = useState({ show: false, expand: false });
   const [catShow, setCatShow] = useState("All");
+
+  async function fetchStore() {
+    const response = await request("GET", "/store/" + id_store);
+    if (!response || response.error) return setStore({ ...store, error: true });
+
+    setStore({ loading: false, data: response });
+  }
+
+  async function fetchMenu() {
+    const response = await request("GET", "/store/" + id_store + "/menu");
+    if (!response || response.error) return setMenu({ ...menu, error: true });
+
+    setMenu({ loading: false, data: response });
+  }
+
+  async function fetchCategories() {
+    const response = await request("GET", "/category");
+    if (!response || response.error)
+      return setPopup({
+        type: "error",
+        title: "An Error has Occurred",
+        message: "Failed to load product categories",
+      });
+
+    setCategories(response.map((r) => r.name));
+  }
+
+  useEffect(() => {
+    fetchStore();
+    fetchMenu();
+    fetchCategories();
+  }, []);
 
   function handleSetPage(index) {
     if (index === imgIndex) return;
@@ -177,7 +106,7 @@ export default function Store() {
     onSwipe();
     el.addEventListener("scroll", onSwipe, { passive: true });
     return () => el.removeEventListener("scroll", onSwipe);
-  }, []);
+  }, [carousel.current]);
 
   // Description handler
   useEffect(() => {
@@ -205,119 +134,203 @@ export default function Store() {
         <div></div>
       </div>
 
-      <div className="storeimg-container">
-        <div className="images" ref={carousel}>
-          {store.data.media.map((m) => (
-            <img src={m} />
-          ))}
-        </div>
+      {store.loading ? (
+        store.error ? (
+          <LoadingError onRetry={fetchStore} />
+        ) : (
+          <LoadingSpinner />
+        )
+      ) : (
+        <>
+          <div className="storeimg-container">
+            <div className="images" ref={carousel}>
+              {store.data.media.map((m) => (
+                <img src={getImage(m)} />
+              ))}
+            </div>
 
-        <div className="buttons">
-          {store.data.media.map((m, i) => (
-            <button
-              key={i}
-              className={`${
-                i === imgIndex ? "bg-black" : "bg-gray-300/50"
-              } size-3 rounded-full`}
-              onClick={() => handleSetPage(i)}
-            ></button>
-          ))}
-        </div>
-      </div>
+            <div className="buttons">
+              {store.data.media.map((m, i) => (
+                <button
+                  key={i}
+                  className={`${
+                    i === imgIndex ? "bg-black" : "bg-gray-300/50"
+                  } size-3 rounded-full`}
+                  onClick={() => handleSetPage(i)}
+                ></button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
 
       <div className="w-full p-4 space-y-3">
-        <h2 className="text-lg font-bold">{store.data.name}</h2>
-        <div
-          className="flex justify-between"
-          onClick={() =>
-            setPopscreen({ element: <Popscreen_Reviews />, id_store: id_store })
-          }
-        >
-          <div className="flex items-center gap-1">
-            {[...Array(store.data.rating)].map((_, i) => (
-              <img src={starIcon} />
-            ))}
-          </div>
-          <p className="text-sm text-gray-500 underline">
-            See Reviews ({store.data.review_count})
-          </p>
-        </div>
-        <div className="flex items-center gap-4">
-          <img src={personIcon} />
-          <p>{store.data.username}</p>
-        </div>
+        {store.loading ? (
+          store.error ? (
+            <LoadingError onRetry={fetchStore} />
+          ) : (
+            <LoadingSpinner />
+          )
+        ) : (
+          <>
+            <h2 className="text-lg font-bold">{store.data.name}</h2>
+            <div
+              className="flex justify-between"
+              onClick={() =>
+                setPopscreen({
+                  element: <Popscreen_Reviews />,
+                  id_store: id_store,
+                  has_ordered: store.data.has_ordered,
+                  has_reviewed: store.data.has_reviewed,
+                })
+              }
+            >
+              {store.data.rating ? (
+                <div className="flex items-center gap-1">
+                  {[...Array(parseInt(store.data.rating))].map((_, i) => (
+                    <img src={starIcon} />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-(--primary-color)">
+                  Not enough reviews
+                </p>
+              )}
+              <p className="text-sm text-gray-500 underline">
+                See Reviews ({store.data.review_count ?? 0})
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              <img src={personIcon} />
+              <p>{store.data.username}</p>
+            </div>
 
-        <p
-          ref={desc}
-          className={`${
-            descExpand.show && !descExpand.expand
-              ? "max-h-32 overflow-clip"
-              : ""
-          }`}
-        >
-          {store.data.description}
-        </p>
-        {descExpand.show ? (
-          <div
-            className="w-full flex items-center gap-1"
-            onClick={() =>
-              setDescExpand({ show: true, expand: !descExpand.expand })
-            }
-          >
-            <div className="basis-0 grow h-0.5 bg-gray-500"></div>
-            <p className="text-gray-500">
-              Read {descExpand.expand ? "Less" : "More"}
+            <p
+              ref={desc}
+              className={`${
+                descExpand.show && !descExpand.expand
+                  ? "max-h-32 overflow-clip"
+                  : ""
+              }`}
+            >
+              {store.data.description}
             </p>
-            <div className="basis-0 grow h-0.5 bg-gray-500"></div>
-          </div>
-        ) : null}
+            {descExpand.show ? (
+              <div
+                className="w-full flex items-center gap-1"
+                onClick={() =>
+                  setDescExpand({ show: true, expand: !descExpand.expand })
+                }
+              >
+                <div className="basis-0 grow h-0.5 bg-gray-500"></div>
+                <p className="text-gray-500">
+                  Read {descExpand.expand ? "Less" : "More"}
+                </p>
+                <div className="basis-0 grow h-0.5 bg-gray-500"></div>
+              </div>
+            ) : null}
 
-        <div className="flex items-top gap-4">
-          <img src={locationIcon} />
-          <p>{store.data.address}</p>
-        </div>
+            <div className="flex items-top gap-4">
+              <img src={locationIcon} />
+              <p>{store.data.address}</p>
+            </div>
 
-        <iframe
-          width={"100%"}
-          height={"200px"}
-          style={{ borderRadius: "15px", marginBottom: "1em" }}
-          loading="lazy"
-          allowFullScreen
-          referrerPolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCchDE8A3_bdJNyqjwh5JkEp4J3IhuvvWw
+            <iframe
+              width={"100%"}
+              height={"200px"}
+              style={{ borderRadius: "15px", marginBottom: "1em" }}
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCchDE8A3_bdJNyqjwh5JkEp4J3IhuvvWw
     &q=Space+Needle,Seattle+WA"
-        ></iframe>
+            ></iframe>
+          </>
+        )}
 
         <div className="w-full h-0.5 bg-(--primary-color) my-8"></div>
 
         <h2 className="text-lg font-bold">Order Menu</h2>
 
-        <div className="category-selector">
-          <button className="selected">Home</button>
-          <button>Chicken</button>
-          <button>Rice</button>
-          <button>Noodles</button>
-          <button>Snacks</button>
-          <button>Japanese</button>
-          <button>Drinks</button>
-          <button>Tea</button>
-          <button>Coffee</button>
-        </div>
-
-        <TextInput
-          placeholder={"Find menu"}
-          img={searchIcon}
-          customStyle={"bg-white border-2 border-(--primary-color)"}
-        />
-
-        <div className="flex items-center gap-4">
-          <img src={thumbsIcon} />
-          <p>Best Selling Menu</p>
-        </div>
-
-        {catShow === "All" ? (
+        {menu.loading ? (
+          menu.error ? (
+            <LoadingError onRetry={fetchMenu} />
+          ) : (
+            <LoadingSpinner />
+          )
+        ) : (
           <>
-            {menu.loading ? (
+            {categories && menu.data ? (
+              <div className="category-selector">
+                <button
+                  className={`${catShow === "All" ? "selected" : ""}`}
+                  onClick={() => setCatShow("All")}
+                >
+                  Home
+                </button>
+                {categories
+                  .filter(
+                    (c) => menu.data.filter((m) => m.category === c).length > 0
+                  )
+                  .map((c, i) => (
+                    <button
+                      key={i}
+                      className={`${catShow === c ? "selected" : ""}`}
+                      onClick={() => setCatShow(c)}
+                    >
+                      {c}
+                    </button>
+                  ))}
+              </div>
+            ) : null}
+
+            <TextInput
+              placeholder={"Find menu"}
+              img={searchIcon}
+              customStyle={"bg-white border-2 border-(--primary-color)"}
+            />
+
+            <div className="flex items-center gap-4">
+              <img src={thumbsIcon} />
+              <p>Best Selling Menu</p>
+            </div>
+
+            {catShow === "All" ? (
+              <>
+                {menu.loading ? (
+                  menu.error ? (
+                    <LoadingError />
+                  ) : (
+                    <LoadingSpinner />
+                  )
+                ) : (
+                  <MenuList
+                    menuItems={menu.data.filter((m) => m.best_seller)}
+                    cart={cart}
+                    setCart={setCart}
+                  />
+                )}
+
+                <div className="flex items-center gap-4">
+                  <img src={menuIcon} />
+                  <p>All Menu</p>
+                </div>
+
+                {menu.loading ? (
+                  menu.error ? (
+                    <LoadingError />
+                  ) : (
+                    <LoadingSpinner />
+                  )
+                ) : (
+                  <MenuList
+                    menuItems={menu.data}
+                    cart={cart}
+                    setCart={setCart}
+                  />
+                )}
+              </>
+            ) : menu.loading ? (
               menu.error ? (
                 <LoadingError />
               ) : (
@@ -325,40 +338,15 @@ export default function Store() {
               )
             ) : (
               <MenuList
-                menuItems={menu.data.filter((m) => m.best_seller)}
+                menuItems={menu.data.filter((m) => m.category === catShow)}
                 cart={cart}
                 setCart={setCart}
               />
             )}
-
-            <div className="flex items-center gap-4">
-              <img src={menuIcon} />
-              <p>All Menu</p>
-            </div>
-
-            {menu.loading ? (
-              menu.error ? (
-                <LoadingError />
-              ) : (
-                <LoadingSpinner />
-              )
-            ) : (
-              <MenuList menuItems={menu.data} cart={cart} setCart={setCart} />
-            )}
           </>
-        ) : menu.loading ? (
-          menu.error ? (
-            <LoadingError />
-          ) : (
-            <LoadingSpinner />
-          )
-        ) : (
-          <MenuList
-            menuItems={menu.data.filter((m) => m.category === catShow)}
-            cart={cart}
-            setCart={setCart}
-          />
         )}
+
+        <div className="my-32"></div>
       </div>
     </>
   );
@@ -383,6 +371,9 @@ function MenuList({ menuItems, cart, setCart, fetchMenu }) {
           >
             <div className="basis-0 grow">
               <p>{m.name}</p>
+              {m.description ? (
+                <p className="text-sm text-gray-500/80">{m.description}</p>
+              ) : null}
               <p className="text-sm text-gray-500/70">
                 Rp. {Intl.NumberFormat("en-ID").format(m.price)}
               </p>

@@ -3,11 +3,34 @@ import starIconWhite from "../../assets/icons/icon_star_white.svg";
 
 import { useContext, useEffect, useState } from "react";
 import { PopscreenContext } from "../../providers/PopscreenProvider";
+import Popscreen_Reviews from "./Popscreen_Reviews";
+import request from "../../util/API";
+import { PopupContext } from "../../providers/PopupProvider";
 
 export default function Popscreen_ReviewWrite() {
   const { popscreen, setPopscreen } = useContext(PopscreenContext);
+  const { popup, setPopup } = useContext(PopupContext);
 
   const [review, setReview] = useState({ content: "", stars: 5 });
+
+  async function handleReview() {
+    const response = await request(
+      "POST",
+      "/store/" + popscreen.id_store + "/review"
+    );
+    if (response && response.error)
+      return setPopup({
+        type: "error",
+        title: "An Error Has Occurred",
+        message: "Failed to post review. Try again.",
+      });
+
+    setPopup({
+      type: "success",
+      title: "Successfully posted review",
+    });
+    setPopscreen({ ...popscreen, element: <Popscreen_Reviews /> });
+  }
 
   return (
     <div
@@ -41,8 +64,17 @@ export default function Popscreen_ReviewWrite() {
         onChange={(e) => setReview({ ...review, content: e.target.value })}
       ></textarea>
 
-      <button className="btn smaller primary full mt-4">Add Your Review</button>
-      <button className="btn smaller red full mt-4">Cancel</button>
+      <button className="btn smaller primary full mt-4" onClick={handleReview}>
+        Add Your Review
+      </button>
+      <button
+        className="btn smaller red full mt-4"
+        onClick={() =>
+          setPopscreen({ ...popscreen, element: <Popscreen_Reviews /> })
+        }
+      >
+        Cancel
+      </button>
     </div>
   );
 }
