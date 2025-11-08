@@ -89,7 +89,7 @@ export default function Home() {
         </p>
         <div className="w-full mt-2 p-4 bg-(--primary-color) rounded-xl grid grid-cols-[40%_1fr] gap-2">
           <img
-            className="aspect-square h-auto object-cover rounded-md"
+            className="aspect-square w-full h-auto object-cover rounded-md"
             src={testImg}
           />
           <div className="text-white flex flex-col">

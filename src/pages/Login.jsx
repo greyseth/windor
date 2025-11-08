@@ -9,7 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../providers/LoginProvider";
 import TextInput from "../components/TextInput";
 import Checkbox from "../components/Checkbox";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import request from "../util/API";
 import { PopupContext } from "../providers/PopupProvider";
 
@@ -44,6 +44,7 @@ export default function Auth() {
 function LoginForm({ setFormType }) {
   const { loginToken, setLoginToken } = useContext(LoginContext);
   const { popup, setPopup } = useContext(PopupContext);
+  const navigate = useNavigate();
 
   const [loginInput, setLoginInput] = useState({});
   // const [rememberMe, setRememberMe] = useState(false);
@@ -78,7 +79,7 @@ function LoginForm({ setFormType }) {
       message: "Successfully logged in with " + loginInput.email,
     });
 
-    // TODO: Navigate to home page
+    navigate("/app");
   }
 
   return (

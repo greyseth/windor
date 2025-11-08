@@ -3,7 +3,9 @@ import bannerImage from "../assets/img/landing_banner.jpeg";
 import testImg1 from "../assets/img/img_testing.png";
 import testImg2 from "../assets/img/img_testing2.jpg";
 import testImg3 from "../assets/img/img_testing3.jpg";
-import testImg4 from "../assets/img/img_testing4.png";
+import promoImg1 from "../assets/img/img_promo_1.png";
+import promoImg2 from "../assets/img/img_promo_2.png";
+import promoImg3 from "../assets/img/img_promo_3.jpg";
 
 import { useContext, useEffect, useRef } from "react";
 import { LoginContext } from "../providers/LoginProvider";
@@ -56,7 +58,7 @@ export default function Landing() {
           ref={(ref) => (bubblesRef.current[0] = ref)}
         >
           <img
-            src={testImg1}
+            src={promoImg1}
             className="w-full h-auto aspect-video rounded-lg object-cover"
           />
           <div className="basis-0 grow text-white text-center">
@@ -73,7 +75,7 @@ export default function Landing() {
           ref={(ref) => (bubblesRef.current[1] = ref)}
         >
           <img
-            src={testImg2}
+            src={promoImg2}
             className="w-full h-auto aspect-video rounded-lg object-cover"
           />
           <div className="basis-0 grow text-white text-center">
@@ -87,7 +89,7 @@ export default function Landing() {
           ref={(ref) => (bubblesRef.current[2] = ref)}
         >
           <img
-            src={testImg3}
+            src={promoImg3}
             className="w-full h-auto aspect-video rounded-lg object-cover"
           />
           <div className="basis-0 grow text-white text-center">
