@@ -25,6 +25,7 @@ import Popscreen_Reviews from "../components/popscreen/Popscreen_Reviews";
 import request from "../util/API";
 import getImage from "../util/getImage";
 import { PopupContext } from "../providers/PopupProvider";
+import extractCoords from "../util/extractCoords";
 
 export default function Store() {
   const carousel = useRef(undefined);
@@ -232,7 +233,15 @@ export default function Store() {
 
             <div className="flex items-top gap-4">
               <img src={locationIcon} />
-              <p>{store.data.address}</p>
+              <p>
+                {!store.data.address.startsWith("pb=")
+                  ? store.data.address
+                  : `Lat: ${
+                      extractCoords(store.data.address.split("pb=")[1]).lat
+                    } | Long: ${
+                      extractCoords(store.data.address.split("pb=")[1]).lng
+                    }`}
+              </p>
             </div>
 
             <iframe
@@ -242,8 +251,13 @@ export default function Store() {
               loading="lazy"
               allowFullScreen
               referrerPolicy="no-referrer-when-downgrade"
-              src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCchDE8A3_bdJNyqjwh5JkEp4J3IhuvvWw
-    &q=Space+Needle,Seattle+WA"
+              src={`https://www.google.com/maps?q=${
+                !store.data.address.startsWith("pb=")
+                  ? `${encodeURIComponent(store.data.address)}`
+                  : `${extractCoords(store.data.address.split("pb=")[1]).lat},${
+                      extractCoords(store.data.address.split("pb=")[1]).lng
+                    }`
+              }&z=15&output=embed`}
             ></iframe>
           </>
         )}
