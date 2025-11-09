@@ -9,17 +9,36 @@ import testImg from "../assets/img/img_testing.png";
 import TextInput from "../components/TextInput";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import ExtraPageContainer from "../components/ExtraPageContainer";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { PopscreenContext } from "../providers/PopscreenProvider";
 import Popscreen_Topup from "../components/popscreen/Popscreen_Topup";
 import Popscreen_Transfer from "../components/popscreen/Popscreen_Transfer";
 import { SearchContext } from "../providers/SearchProvider";
+import LoadingError from "../components/LoadingError";
+import LoadingSpinner from "../components/LoadingSpinner";
+import request from "../util/API";
+import Popscreen_Coupon from "../components/popscreen/Popscreen_Coupon";
+import getImage from "../util/getImage";
 
 export default function Home() {
   const { search, setSearch } = useContext(SearchContext);
   const { popscreen, setPopscreen } = useContext(PopscreenContext);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [coupons, setCoupons] = useState({ loading: true, data: [] });
+
+  async function fetchCoupons() {
+    const response = await request("GET", "/coupon");
+    if (!response || response.error)
+      return setCoupons({ ...coupons, error: true });
+
+    setCoupons({ loading: false, data: response });
+  }
+
+  useEffect(() => {
+    fetchCoupons();
+  }, []);
 
   return (
     <>
@@ -115,29 +134,48 @@ export default function Home() {
           Perfrom transactions using Wincoins and discover our exclusive
           promotions
         </p>
-        <ul className="mt-2 w-full overflow-x-scroll snap-x snap-mandatory list-none flex">
-          <li className="min-w-full p-4 snap-start">
-            <img
-              src={testImg}
-              className="w-full h-auto aspect-video object-cover rounded-lg"
-            />
-          </li>
-          <li className="min-w-full p-4 snap-start">
-            <img
-              src={testImg}
-              className="w-full h-auto aspect-video object-cover rounded-lg"
-            />
-          </li>
-          <li className="min-w-full p-4 snap-start">
-            <img
-              src={testImg}
-              className="w-full h-auto aspect-video object-cover rounded-lg"
-            />
-          </li>
-        </ul>
-        <p className="text-xs text-gray-500/80 text-center">
-          Scroll horizontally to view more
-        </p>
+        {coupons.loading ? (
+          coupons.error ? (
+            <LoadingError onRetry={fetchCoupons} />
+          ) : (
+            <LoadingSpinner />
+          )
+        ) : (
+          <>
+            <ul className="mt-2 w-full overflow-x-scroll snap-x snap-mandatory list-none flex">
+              {coupons.data
+                .filter((_, i) => i < 4)
+                .map((c) => (
+                  <li
+                    key={c.id_coupon}
+                    className="min-w-full p-4 snap-start"
+                    onClick={() =>
+                      setPopscreen({
+                        element: <Popscreen_Coupon />,
+                        id_coupon: c.id_coupon,
+                      })
+                    }
+                  >
+                    <img
+                      src={getImage(c.filename)}
+                      className="w-full h-auto aspect-video object-cover rounded-lg"
+                    />
+                  </li>
+                ))}
+              <li
+                className="min-w-full p-4 snap-start"
+                onClick={() => navigate("/app/wincoins")}
+              >
+                <div className="w-full h-auto aspect-video bg-(--primary-color) flex justify-center items-center rounded-lg">
+                  <p className="text-white font-bold">View All</p>
+                </div>
+              </li>
+            </ul>
+            <p className="text-xs text-gray-500/80 text-center">
+              Scroll horizontally to view more
+            </p>
+          </>
+        )}
       </div>
     </>
   );
