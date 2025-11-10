@@ -33,7 +33,7 @@ export default function Landing() {
     <>
       <img
         src={bannerImage}
-        className="w-full h-auto aspect-video object-cover"
+        className="w-full h-auto aspect-video object-cover resp-landing-banner"
       />
 
       <div className="banner-transition">
@@ -41,7 +41,7 @@ export default function Landing() {
         <div className="gradient"></div>
       </div>
 
-      <div className="w-full p-8 space-y-4">
+      <div className="w-full p-8 space-y-4 resp-landing-content">
         <h1 className="text-(--primary-color) font-bold text-xl text-center">
           BRIDGING THE GAP BETWEEN STUDENTS AND ASPIRING UMKM
         </h1>
@@ -53,50 +53,53 @@ export default function Landing() {
 
         <div className="h-8"></div>
 
-        <div
-          className="bg-(--primary-color) rounded-xl p-4 flex flex-col gap-4 bubble"
-          ref={(ref) => (bubblesRef.current[0] = ref)}
-        >
-          <img
-            src={promoImg1}
-            className="w-full h-auto aspect-video rounded-lg object-cover"
-          />
-          <div className="basis-0 grow text-white text-center">
-            <p className="font-bold text-xl">ORDER IN ADVANCE</p>
-            <p>
-              Running late? Place an order for alter and pick up immediately
-              after it's done
-            </p>
+        <div className="flex flex-col gap-4 resp-landing-bubbles">
+          <div
+            className="bg-(--primary-color) rounded-xl p-4 flex flex-col gap-4 bubble"
+            ref={(ref) => (bubblesRef.current[0] = ref)}
+          >
+            <img
+              src={promoImg1}
+              className="w-full h-auto aspect-video rounded-lg object-cover"
+            />
+            <div className="basis-0 grow text-white text-center">
+              <p className="font-bold text-xl">ORDER IN ADVANCE</p>
+              <p>
+                Running late? Place an order for alter and pick up immediately
+                after it's done
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div
-          className="bg-(--primary-color) rounded-xl p-4 flex flex-col gap-4 bubble"
-          ref={(ref) => (bubblesRef.current[1] = ref)}
-        >
-          <img
-            src={promoImg2}
-            className="w-full h-auto aspect-video rounded-lg object-cover"
-          />
-          <div className="basis-0 grow text-white text-center">
-            <p className="font-bold text-xl">EARN EXCLUSIVE REWARDS</p>
-            <p>Purchase with Wincoins and redeem rewards using Dorpoints</p>
+          <div
+            className="bg-(--primary-color) rounded-xl p-4 flex flex-col gap-4 bubble"
+            ref={(ref) => (bubblesRef.current[1] = ref)}
+          >
+            <img
+              src={promoImg2}
+              className="w-full h-auto aspect-video rounded-lg object-cover"
+            />
+            <div className="basis-0 grow text-white text-center">
+              <p className="font-bold text-xl">EARN EXCLUSIVE REWARDS</p>
+              <p>Purchase with Wincoins and redeem rewards using Dorpoints</p>
+            </div>
           </div>
-        </div>
 
-        <div
-          className="bg-(--primary-color) rounded-xl p-4 flex flex-col gap-4 bubble"
-          ref={(ref) => (bubblesRef.current[2] = ref)}
-        >
-          <img
-            src={promoImg3}
-            className="w-full h-auto aspect-video rounded-lg object-cover"
-          />
-          <div className="basis-0 grow text-white text-center">
-            <p className="font-bold text-xl">INCREASE YOUR REACH</p>
-            <p>
-              Promote with Windor and reach a larger audience for your business
-            </p>
+          <div
+            className="bg-(--primary-color) rounded-xl p-4 flex flex-col gap-4 bubble"
+            ref={(ref) => (bubblesRef.current[2] = ref)}
+          >
+            <img
+              src={promoImg3}
+              className="w-full h-auto aspect-video rounded-lg object-cover"
+            />
+            <div className="basis-0 grow text-white text-center">
+              <p className="font-bold text-xl">INCREASE YOUR REACH</p>
+              <p>
+                Promote with Windor and reach a larger audience for your
+                business
+              </p>
+            </div>
           </div>
         </div>
 

@@ -1,0 +1,19 @@
+/* responsive.css — styles applied when viewport is strictly wider than 950px */
+@media (min-width: 951px) {
+  .resp-landing-banner,
+  .banner-transition > div:first-child {
+    height: 35vh;
+    aspect-ratio: initial;
+  }
+  .resp-landing-bubbles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 1em;
+  }
+  .resp-landing-content .text-xl {
+    font-size: 1.5em;
+  }
+  .resp-landing-content .text-center {
+    font-size: 1.15em;
+  }
+}
