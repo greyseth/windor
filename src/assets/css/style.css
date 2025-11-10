@@ -71,7 +71,7 @@
 .btn {
   box-shadow: 0 0 0 4px rgba(15, 97, 171, 0.12);
   transition: 0.25s;
-  @apply rounded-[15px] p-4 font-bold text-white flex justify-center items-center gap-2;
+  @apply rounded-[15px] p-4 font-bold text-white flex justify-center items-center gap-2 cursor-pointer;
 }
 .btn.white {
   @apply bg-white text-black;
