@@ -10,7 +10,7 @@ export default function Popscreen_Topup() {
 
   return (
     <div
-      className="w-full p-4 rounded-xl bg-white"
+      className="w-full max-w-[700px] p-4 rounded-xl bg-white"
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -26,7 +26,7 @@ export default function Popscreen_Topup() {
       <ul className="w-full py-4 grid grid-cols-2 gap-4">
         {topupAmounts.map((a, i) => (
           <li
-            className="rounded-md bg-(--primary-color) text-white pt-4"
+            className="rounded-md bg-(--primary-color) text-white pt-4 cursor-pointer"
             key={i}
           >
             <div className="flex justify-evenly items-center mb-4">

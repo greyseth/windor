@@ -57,7 +57,7 @@ export default function Navbar() {
           <div className="bottom shadow"></div>
         </div>
       ) : (
-        <div className="w-full h-fit p-3 px-8 flex justify-between items-center bg-white shadow-xl fixed top-0 left-0 z-20">
+        <div className="w-full h-fit p-3 px-8 flex justify-between items-center bg-white shadow-xl sticky top-0 left-0 z-20">
           <div className="cursor-pointer" onClick={() => navigate("/")}>
             <p className="text-lg text-(--primary-color) font-bold">WINDOR</p>
           </div>
