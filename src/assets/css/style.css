@@ -58,6 +58,7 @@
 }
 .dropdown:hover {
   background-color: var(--secondary-color);
+  cursor: pointer;
 }
 .dropdown:focus {
   background-color: var(--primary-color);

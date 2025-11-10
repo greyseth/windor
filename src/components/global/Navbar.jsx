@@ -9,6 +9,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { MobileContext } from "../../providers/MobileProvider";
 import TextInput from "../TextInput";
+import { SearchContext } from "../../providers/SearchProvider";
 
 const navItems = [
   {
@@ -30,6 +31,7 @@ const navItems = [
 
 export default function Navbar() {
   const { isMobile, setIsMobile } = useContext(MobileContext);
+  const { search, setSearch } = useContext(SearchContext);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -62,7 +64,15 @@ export default function Navbar() {
             <p className="text-lg text-(--primary-color) font-bold">WINDOR</p>
           </div>
           <div className="grow px-16">
-            <TextInput img={searchIcon} placeholder={"What to eat?"} />
+            <TextInput
+              img={searchIcon}
+              placeholder={"What to eat?"}
+              value={search.query}
+              onChange={(e) => {
+                navigate("/app/stores/search");
+                setSearch({ ...search, query: e });
+              }}
+            />
           </div>
           <div className="flex justify-center items-center gap-3">
             {navItems.map((n, i) => {
