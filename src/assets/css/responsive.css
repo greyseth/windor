@@ -1,5 +1,5 @@
 /* responsive.css — styles applied when viewport is strictly wider than 950px */
-@media (min-width: 951px) {
+@media (min-width: 950px) {
   .resp-landing-banner,
   .banner-transition > div:first-child {
     height: 35vh;

@@ -24,6 +24,8 @@ import PopscreenHandler from "./components/global/PopscreenHandler.jsx";
 import Transactions from "./pages/Transactions.jsx";
 import Receipt from "./pages/Receipt.jsx";
 import StoreSearch from "./pages/StoreSearch.jsx";
+import MobileProvider from "./providers/MobileProvider.jsx";
+import MobileChecker from "./components/global/MobileChecker.jsx";
 
 const router = createBrowserRouter([
   {
@@ -89,20 +91,23 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <LoginProvider>
-      <PopupProvider>
-        <PopscreenProvider>
-          <SearchProvider>
-            <CartProvider>
-              <LoginChecker />
-              <PopupHandler />
-              <PopscreenHandler />
+    <MobileProvider>
+      <LoginProvider>
+        <PopupProvider>
+          <PopscreenProvider>
+            <SearchProvider>
+              <CartProvider>
+                <LoginChecker />
+                <PopupHandler />
+                <MobileChecker />
+                <PopscreenHandler />
 
-              <RouterProvider router={router} />
-            </CartProvider>
-          </SearchProvider>
-        </PopscreenProvider>
-      </PopupProvider>
-    </LoginProvider>
+                <RouterProvider router={router} />
+              </CartProvider>
+            </SearchProvider>
+          </PopscreenProvider>
+        </PopupProvider>
+      </LoginProvider>
+    </MobileProvider>
   </StrictMode>
 );
