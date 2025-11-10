@@ -7,6 +7,7 @@ import request from "../util/API";
 import LoadingError from "../components/LoadingError";
 import LoadingSpinner from "../components/LoadingSpinner";
 import formatDate from "../util/formatDate";
+import extractCoords from "../util/extractCoords";
 
 export default function Receipt() {
   const { id_order } = useParams();
@@ -44,7 +45,17 @@ export default function Receipt() {
           <div className="p-4 space-y-4">
             <div className="text-center text-xs">
               <p className="font-bold text-lg">{order.data.store.name}</p>
-              <p className="text-gray-500/80">{order.data.store.address}</p>
+              <p className="text-gray-500/80">
+                {order.data.store.address.startsWith("pb=")
+                  ? `Lat: ${
+                      extractCoords(order.data.store.address.split("pb=")[1])
+                        .lat
+                    }| Long: ${
+                      extractCoords(order.data.store.address.split("pb=")[1])
+                        .lng
+                    }`
+                  : order.data.store.address}
+              </p>
               <p className="text-gray-500/80 ">
                 {formatDate(order.data.order_date)} at{" "}
                 {order.data.order_schedule}

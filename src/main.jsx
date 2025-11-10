@@ -24,6 +24,8 @@ import Transactions from "./pages/Transactions.jsx";
 import Receipt from "./pages/Receipt.jsx";
 import StoreSearch from "./pages/StoreSearch.jsx";
 
+// Build FIXMEs: Menu of the day, Navbar on smaller screen, search bar enter on mobile, checkout page checks, alternate login methods
+
 const router = createBrowserRouter([
   {
     path: "/",

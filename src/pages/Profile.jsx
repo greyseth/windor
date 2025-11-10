@@ -42,6 +42,8 @@ export default function Profile() {
   }
 
   useEffect(() => {
+    if (!window.localStorage.getItem("login_token")) return navigate("/auth");
+
     fetchCredentials();
     fetchStores();
   }, []);

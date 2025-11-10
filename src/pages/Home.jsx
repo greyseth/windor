@@ -101,6 +101,7 @@ export default function Home() {
         <div className="my-8"></div>
 
         {/* Today's Recommendation */}
+        {/* TODO: Make API endpoint and implement on frontend */}
         <h1 className="font-bold text-xl">Today's Recommendation</h1>
         <p className="text-xs text-gray-500/80">
           Don't know what to eat? We got you. Consider what we recommend for

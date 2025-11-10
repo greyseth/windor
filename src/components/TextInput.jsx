@@ -20,6 +20,9 @@ export default function TextInput({
         onKeyDown={(e) => {
           if (e.key === "Enter") onEnter();
         }}
+        onInput={(e) => {
+          if (e.inputType === "insertLineBreak") onEnter();
+        }}
       />
     </div>
   );

@@ -36,7 +36,7 @@ export default function TransactionList({ label, transactions }) {
       </div>
       <ul
         ref={list}
-        className={`p-4 pt-0 overflow-y-clip ${
+        className={`p-4 pt-0 space-y-4 overflow-y-clip ${
           !collapsed
             ? itemsHeight
               ? `h-[${itemsHeight}px]`

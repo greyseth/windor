@@ -112,6 +112,12 @@ export default function Landing() {
         >
           GET STARTED
         </button>
+        <button
+          className="btn w-full primary smaller !rounded-xl"
+          onClick={() => navigate("/app")}
+        >
+          View Catalogue First
+        </button>
       </div>
     </>
   );

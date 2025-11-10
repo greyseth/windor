@@ -37,8 +37,8 @@ export default function Checkout() {
     const now = new Date();
     const currentHour = now.getHours();
     const times = [];
-    for (let h = currentHour; h <= 24; h++) {
-      times.push(h === 24 ? "24:00" : `${String(h).padStart(2, "0")}:00`);
+    for (let h = currentHour; h <= 18; h++) {
+      times.push(h === 18 ? "18:00" : `${String(h).padStart(2, "0")}:00`);
     }
     setAvailableTimes(times);
   }, []);
@@ -49,6 +49,13 @@ export default function Checkout() {
   }, [cart]);
 
   async function handleOrder() {
+    if (!paymentMethod)
+      return setPopup({
+        type: "notice",
+        title: "Define Payment Method",
+        message: "Payment method cannot be empty!",
+      });
+
     const response = await request("POST", "/order", {
       id_store: id_store,
       order_time: !pickupTime
@@ -69,10 +76,20 @@ export default function Checkout() {
       type: "success",
       title: "Created New Order",
       message: "Successfull created new order transaction",
+      buttons: [
+        {
+          label: "View Order",
+          onClick: () => navigate("/app/transactions/" + response.id_order),
+        },
+        {
+          label: "All Transactions",
+          onClick: () => navigate("/app/transactions"),
+        },
+      ],
     });
 
-    navigate("/app/transactions/" + response.id_order);
     setCart([]);
+    navigate("/app/stores/" + id_store);
   }
 
   return (
@@ -178,6 +195,9 @@ export default function Checkout() {
               <option value={"WINCOINS"}>Wincoins</option>
             </select>
           </div>
+          {paymentMethod === "WINCOINS" ? (
+            <p className="text-(--primary-color)">Wincoins Balance: 100,000</p>
+          ) : null}
           <div className="flex items-center gap-4">
             <img src={clockIcon} />
             <select
@@ -247,7 +267,9 @@ export default function Checkout() {
           </div>
           <div className="flex justify-between items-center">
             <p>Payment</p>
-            <p>{paymentMethod.toUpperCase()}</p>
+            <p>
+              {paymentMethod ? paymentMethod.toUpperCase() : "NOT SELECTED"}
+            </p>
           </div>
         </div>
 

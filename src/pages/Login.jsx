@@ -5,6 +5,8 @@ import lockIcon from "../assets/icons/icon_lock.svg";
 import googleIcon from "../assets/icons/icon_google.svg";
 import xIcon from "../assets/icons/icon_x.svg";
 
+import windorImage from "../assets/img/img_windorlogo.png";
+
 import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../providers/LoginProvider";
 import TextInput from "../components/TextInput";
@@ -27,7 +29,6 @@ export default function Auth() {
       {/* Login Page Content Container */}
       <div className="w-full h-screen flex flex-col justify-between p-8 [&>div]:grow [&>div]:flex [&>div]:flex-col [&>div]:items-stretch [&>div]:justify-center">
         <div>
-          {/* TODO: Replace with actual application logo */}
           <h1 className="text-4xl font-bold text-white text-center">WINDOR</h1>
         </div>
 
@@ -124,7 +125,7 @@ function LoginForm({ setFormType }) {
         >
           Don't have an account?
         </p>
-        <div className="grid grid-cols-[1fr_1fr]">
+        {/* <div className="grid grid-cols-[1fr_1fr]">
           <div className="p-2">
             <button className="btn white border-2 w-full">
               <img src={googleIcon} />
@@ -135,7 +136,7 @@ function LoginForm({ setFormType }) {
               <img src={xIcon} />
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );
@@ -236,7 +237,7 @@ function RegisterForm({ setFormType }) {
         >
           Already have an account?
         </a>
-        <div className="grid grid-cols-[1fr_1fr]">
+        {/* <div className="grid grid-cols-[1fr_1fr]">
           <div className="p-2">
             <button className="btn white border-2 w-full">
               <img src={googleIcon} />
@@ -247,7 +248,7 @@ function RegisterForm({ setFormType }) {
               <img src={xIcon} />
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

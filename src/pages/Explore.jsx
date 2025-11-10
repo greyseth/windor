@@ -81,6 +81,10 @@ export default function Explore() {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    navigate("/app/stores/search");
+  }, [search.id_category, search.min_rating, search.max_price]);
+
   return (
     <>
       {location.pathname.split("/app/stores")[1].includes("/") ? (
@@ -100,9 +104,11 @@ export default function Explore() {
             }}
           >
             <p className="text-center text-xs">
-              {cart.length} Items - Rp.{" "}
+              {cart.filter((c) => c.id_store === id_store).length} Items - Rp.{" "}
               {Intl.NumberFormat("en-ID").format(
-                cart.reduce((sum, c) => sum + c.price * c.amount, 0)
+                cart
+                  .filter((c) => c.id_store === id_store)
+                  .reduce((sum, c) => sum + c.price * c.amount, 0)
               )}
             </p>
             <p>Proceed to Checkout</p>
