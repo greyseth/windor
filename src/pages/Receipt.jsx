@@ -110,7 +110,15 @@ export default function Receipt() {
             <div className="p-4 space-y-4 border-b-2 border-gray-300/80">
               <div className="flex justify-between items-center">
                 <p>Total</p>
-                <p>Rp. 17,000</p>
+                <p>
+                  Rp.{" "}
+                  {Intl.NumberFormat("en-ID").format(
+                    order.data.menu.reduce(
+                      (sum, c) => sum + c.amount * c.price,
+                      0
+                    )
+                  )}
+                </p>
               </div>
               <div className="flex justify-between items-center">
                 <p>Payment</p>

@@ -23,4 +23,14 @@
   .resp-home-content .text-xs {
     font-size: 1em;
   }
+
+  .storeimg-container .images {
+    overflow-x: hidden !important;
+  }
+}
+
+@media (max-width: 1300px) {
+  .resp-storedesk-container {
+    grid-template-columns: 1fr;
+  }
 }

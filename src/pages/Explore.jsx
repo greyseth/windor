@@ -3,6 +3,7 @@ import "../assets/css/explore.css";
 
 import searchIcon from "../assets/icons/icon_search.svg";
 import testImage from "../assets/img/img_testing.png";
+import bannerImage from "../assets/img/home_banner.jpg";
 import StoreItems from "../components/StoreItems";
 
 import TextInput from "../components/TextInput";
@@ -13,11 +14,14 @@ import { SearchContext } from "../providers/SearchProvider";
 import request from "../util/API";
 import { PopupContext } from "../providers/PopupProvider";
 import { MobileContext } from "../providers/MobileProvider";
+import { PopscreenContext } from "../providers/PopscreenProvider";
+import Popscreen_StoreDesk from "../components/popscreen/Popscreen_StoreDesk";
 
 export default function Explore() {
   const { cart, setCart } = useContext(CartContext);
   const { search, setSearch } = useContext(SearchContext);
   const { popup, setPopup } = useContext(PopupContext);
+  const { popscreen, setPopscreen } = useContext(PopscreenContext);
   const { isMobile, setIsMobile } = useContext(MobileContext);
 
   const { id_store } = useParams();
@@ -94,6 +98,16 @@ export default function Explore() {
     fetchCategories();
   }, []);
 
+  useEffect(
+    () =>
+      setPopscreen(
+        id_store && !isMobile
+          ? { element: <Popscreen_StoreDesk />, id_store: id_store }
+          : undefined
+      ),
+    [id_store, isMobile]
+  );
+
   useEffect(() => {
     if (location.pathname.includes("/search")) {
       if (
@@ -119,7 +133,8 @@ export default function Explore() {
         </ExtraPageContainer>
       ) : null}
 
-      {!location.pathname.includes("/checkout") &&
+      {isMobile &&
+      !location.pathname.includes("/checkout") &&
       id_store &&
       cart.filter((c) => c.id_store === id_store).length > 0 ? (
         <div className="checkout">
@@ -154,7 +169,7 @@ export default function Explore() {
         {isMobile ? (
           <>
             <div className="search-bar">
-              <img src={testImage} />
+              <img src={bannerImage} />
               <div>
                 <TextInput
                   placeholder={"Search vendors"}
@@ -221,7 +236,7 @@ export default function Explore() {
           <div className="w-full flex flex-col gap-2">
             <div className="w-full p-4">
               <img
-                src={testImage}
+                src={bannerImage}
                 className="w-[80%] h-[200px] mx-auto object-cover rounded-xl shadow-xl"
               />
               <div className="w-[80%] p-2 mt-4 mx-auto flex items-center justify-between gap-4 [&>select]:text-center [&>select]:w-full">
