@@ -24,6 +24,7 @@ import getImage from "../util/getImage";
 import { MobileContext } from "../providers/MobileProvider";
 import SearchFilters from "../components/SearchFilters";
 import targetIcon from "../assets/icons/icon_target_primary.svg";
+import { CartContext } from "../providers/CartProvider";
 
 export default function Home() {
   const { search, setSearch } = useContext(SearchContext);
@@ -184,7 +185,22 @@ export default function Home() {
 }
 
 function HomeContent() {
+  const { cart, setCart } = useContext(CartContext);
   const navigate = useNavigate();
+
+  const [menuDay, setMenuDay] = useState({ loading: true, data: {} });
+
+  async function fetchMenuDay() {
+    const response = await request("GET", "/store/menu_day");
+    if (!response || response.error)
+      return setMenuDay({ ...menuDay, error: true });
+
+    setMenuDay({ loading: false, data: response });
+  }
+
+  useEffect(() => {
+    fetchMenuDay();
+  }, []);
 
   const [coupons, setCoupons] = useState({ loading: true, data: [] });
 
@@ -209,25 +225,54 @@ function HomeContent() {
         Don't know what to eat? We got you. Consider what we recommend for
         today's meal
       </p>
-      <div className="w-full max-w-[500px] mx-auto mt-4 p-4 bg-(--primary-color) rounded-xl grid grid-cols-[40%_1fr] gap-2">
-        <img
-          className="aspect-square w-full h-auto object-cover rounded-md"
-          src={testImg}
-        />
-        <div className="text-white flex flex-col">
-          <p className="font-bold text-md">MENU NAME</p>
-          <p className="text-sm">Rp. 17,000</p>
-          <div className="w-full flex gap-0.5">
-            <img src={starIcon} />
-            <img src={starIcon} />
-            <img src={starIcon} />
-            <img src={starIcon} />
-            <img src={starIcon} />
+      {menuDay.loading ? (
+        menuDay.error ? (
+          <LoadingError onRetry={fetchMenuDay} />
+        ) : (
+          <LoadingSpinner />
+        )
+      ) : (
+        <div className="w-full max-w-[500px] mx-auto mt-4 p-4 bg-(--primary-color) rounded-xl grid grid-cols-[40%_1fr] gap-2">
+          <img
+            className="aspect-square w-full h-auto object-cover rounded-md"
+            src={getImage(menuDay.data.store_image)}
+          />
+          <div className="text-white flex flex-col">
+            <p className="font-bold text-md">{menuDay.data.name}</p>
+            <p className="text-sm">
+              Rp. {Intl.NumberFormat("en-ID").format(menuDay.data.price)}
+            </p>
+            <div className="w-full flex gap-0.5">
+              {[...Array(5)].map((_, i) =>
+                i + 1 <= menuDay.data.store_rating ? (
+                  <img src={starIcon} />
+                ) : null
+              )}
+            </div>
+            <div className="basis-0 grow"></div>
+            <button
+              className="btn smaller secondary w-full"
+              onClick={() => {
+                setCart([
+                  ...cart,
+                  {
+                    id_menu: menuDay.data.id_menu,
+                    id_store: menuDay.data.id_store,
+                    name: menuDay.data.name,
+                    price: menuDay.data.price,
+                    notes: "",
+                    amount: 1,
+                  },
+                ]);
+
+                navigate("/app/stores/" + menuDay.data.id_store);
+              }}
+            >
+              Order
+            </button>
           </div>
-          <div className="basis-0 grow"></div>
-          <button className="btn smaller secondary w-full">Order</button>
         </div>
-      </div>
+      )}
 
       <div className="my-8"></div>
 
