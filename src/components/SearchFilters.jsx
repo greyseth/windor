@@ -1,15 +1,18 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { SearchContext } from "../providers/SearchProvider";
 import request from "../util/API";
 import { PopupContext } from "../providers/PopupProvider";
 import LoadingError from "./LoadingError";
 import LoadingSpinner from "./LoadingSpinner";
+import { useNavigate } from "react-router-dom";
 
 export default function SearchFilters() {
   const { search, setSearch } = useContext(SearchContext);
   const { popup, setPopup } = useContext(PopupContext);
+  const navigate = useNavigate();
 
   const [categories, setCategories] = useState({ loading: true, data: [] });
+  const [initialLoad, setInitialLoad] = useState(true);
 
   async function fetchCategories() {
     const response = await request("GET", "/category");
@@ -28,6 +31,16 @@ export default function SearchFilters() {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    if (initialLoad) {
+      setInitialLoad(false);
+      return;
+    }
+
+    if (search.id_category || search.min_rating || search.max_price)
+      navigate("/app/stores/search");
+  }, [search.id_category, search.min_rating, search.max_price]);
 
   return (
     <div className="p-4 rounded-xl shadow-xl w-full h-full bg-white overflow-y-auto">
