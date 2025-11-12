@@ -27,6 +27,16 @@
   .storeimg-container .images {
     overflow-x: hidden !important;
   }
+
+  .resp-transactionlist {
+    padding: 1em;
+  }
+  .resp-transactionlist .text-sm {
+    font-size: 1em;
+  }
+  .resp-transactionlist .text-xs {
+    font-size: 0.8em;
+  }
 }
 
 @media (max-width: 1300px) {
