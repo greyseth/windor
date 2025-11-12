@@ -25,6 +25,8 @@ import { MobileContext } from "../providers/MobileProvider";
 import SearchFilters from "../components/SearchFilters";
 import targetIcon from "../assets/icons/icon_target_primary.svg";
 import { CartContext } from "../providers/CartProvider";
+import Popscreen_Receipt from "../components/popscreen/Popscreen_Receipt";
+import Popscreen_Rewards from "../components/popscreen/Popscreen_Rewards";
 
 export default function Home() {
   const { search, setSearch } = useContext(SearchContext);
@@ -173,8 +175,14 @@ export default function Home() {
                   </button>
                 </div>
 
-                <button className="btn primary full">Explore Rewards</button>
-                {/* TODO: Turn rewards into a popscreen */}
+                <button
+                  className="btn primary full"
+                  onClick={() =>
+                    setPopscreen({ element: <Popscreen_Rewards /> })
+                  }
+                >
+                  Explore Rewards
+                </button>
               </div>
             </div>
           </div>

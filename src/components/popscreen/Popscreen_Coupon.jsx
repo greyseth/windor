@@ -4,9 +4,12 @@ import request from "../../util/API";
 import getImage from "../../util/getImage";
 import LoadingError from "../LoadingError";
 import LoadingSpinner from "../LoadingSpinner";
+import { MobileContext } from "../../providers/MobileProvider";
+import Popscreen_Rewards from "./Popscreen_Rewards";
 
 export default function Popscreen_Coupon() {
   const { popscreen, setPopscreen } = useContext(PopscreenContext);
+  const { isMobile, setIsMobile } = useContext(MobileContext);
 
   const [coupon, setCoupon] = useState({ loading: true, data: {} });
 
@@ -24,7 +27,7 @@ export default function Popscreen_Coupon() {
 
   return (
     <div
-      className="w-full p-4 rounded-xl bg-white"
+      className="w-full max-w-[500px] p-4 rounded-xl bg-white"
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -72,7 +75,15 @@ export default function Popscreen_Coupon() {
           <p className="text-center text-(--primary-color)">
             Dorpoints Balance: 50
           </p>
-          <button className="btn primary full smaller">Buy Coupon</button>
+          <button className="btn primary full smaller mb-4">Buy Coupon</button>
+          {!isMobile ? (
+            <button
+              className="btn red full smaller"
+              onClick={() => setPopscreen({ element: <Popscreen_Rewards /> })}
+            >
+              Back
+            </button>
+          ) : null}
         </>
       )}
     </div>

@@ -12,28 +12,11 @@ import { PopscreenContext } from "../providers/PopscreenProvider";
 import Popscreen_Topup from "../components/popscreen/Popscreen_Topup";
 import Popscreen_Transfer from "../components/popscreen/Popscreen_Transfer";
 import request from "../util/API";
-import LoadingError from "../components/LoadingError";
-import LoadingSpinner from "../components/LoadingSpinner";
-import getImage from "../util/getImage";
-import Popscreen_Coupon from "../components/popscreen/Popscreen_Coupon";
+import RewardsList from "../components/RewardsList";
 
 export default function Wincoins() {
   const { popscreen, setPopscreen } = useContext(PopscreenContext);
   const navigate = useNavigate();
-
-  const [coupons, setCoupons] = useState({ loading: true, data: [] });
-
-  async function fetchCoupons() {
-    const response = await request("GET", "/coupon");
-    if (!response || response.error)
-      return setCoupons({ ...coupons, error: true });
-
-    setCoupons({ loading: false, data: response });
-  }
-
-  useEffect(() => {
-    fetchCoupons();
-  }, []);
 
   return (
     <>
@@ -90,38 +73,7 @@ export default function Wincoins() {
       </div>
 
       <div className="py-8 px-4">
-        <h1 className="text-xl font-bold">Exchange Dorpoints</h1>
-        <p className="text-sm text-gray-500/80 mb-4">
-          *Coupons can only be applied to transactions paid using Wincoins
-        </p>
-
-        {coupons.loading ? (
-          coupons.error ? (
-            <LoadingError onRetry={fetchCoupons} />
-          ) : (
-            <LoadingSpinner />
-          )
-        ) : (
-          <ul className="w-full space-y-4">
-            {coupons.data.map((c) => (
-              <li
-                key={c.id_coupon}
-                className="rounded-xl overflow-clip"
-                onClick={() =>
-                  setPopscreen({
-                    element: <Popscreen_Coupon />,
-                    id_coupon: c.id_coupon,
-                  })
-                }
-              >
-                <img
-                  src={getImage(c.filename)}
-                  className="w-full h-auto aspect-video -z-10 object-cover"
-                />
-              </li>
-            ))}
-          </ul>
-        )}
+        <RewardsList />
       </div>
     </>
   );
