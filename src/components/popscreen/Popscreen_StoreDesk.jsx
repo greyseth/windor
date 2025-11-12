@@ -11,6 +11,8 @@ import minusIcon from "../../assets/icons/icon_minus_primary.svg";
 import moneyIcon from "../../assets/icons/icon_money_primary.svg";
 import clockIcon from "../../assets/icons/icon_clock_primary.svg";
 import discountIcon from "../../assets/icons/icon_discount_primary.svg";
+import backIconWhite from "../../assets/icons/icon_back_white.svg";
+import forwardIcon from "../../assets/icons/icon_forward.svg";
 
 import { useContext, useEffect, useRef, useState } from "react";
 import { PopscreenContext } from "../../providers/PopscreenProvider";
@@ -278,6 +280,24 @@ export default function Popscreen_StoreDesk() {
                     ></button>
                   ))}
                 </div>
+
+                {/* Floating Controls Buttons */}
+                {imgIndex === 0 ? null : (
+                  <div
+                    className="p-2 rounded-full bg-gray-500/80 hover:scale-105 active:bg-gray-500 cursor-pointer absolute left-8 top-[40%]"
+                    onClick={() => handleSetPage(imgIndex - 1)}
+                  >
+                    <img src={backIconWhite} className="size-10" />
+                  </div>
+                )}
+                {imgIndex === store.data.media.length - 1 ? null : (
+                  <div
+                    className="p-2 rounded-full bg-gray-500/80 hover:scale-105 active:bg-gray-500 cursor-pointer absolute right-8 top-[40%]"
+                    onClick={() => handleSetPage(imgIndex + 1)}
+                  >
+                    <img src={forwardIcon} className="size-10" />
+                  </div>
+                )}
               </div>
 
               <div className="w-full p-4 space-y-3">
