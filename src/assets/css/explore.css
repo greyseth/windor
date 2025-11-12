@@ -30,9 +30,11 @@
 .storeitem {
   transition: 0.25s;
 }
-.storeitem:active {
+.storeitem:active,
+.storeitem:hover {
   transform: scale(105%);
   background-color: rgba(128, 128, 128, 0.3);
+  cursor: pointer;
 }
 .storeitem .transparency {
   position: absolute;

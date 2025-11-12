@@ -13,7 +13,6 @@ export default function Popscreen_Reviews() {
   const { popup, setPopup } = useContext(PopupContext);
 
   const [reviews, setReviews] = useState({ loading: true, data: [] });
-  const [hasReviewed, setHasReviewed] = useState(false);
 
   async function fetchReviews() {
     const response = await request(

@@ -1,0 +1,46 @@
+/* responsive.css — styles applied when viewport is strictly wider than 950px */
+@media (min-width: 950px) {
+  .resp-landing-banner,
+  .banner-transition > div:first-child {
+    height: 35vh;
+    aspect-ratio: initial;
+  }
+  .resp-landing-bubbles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 1em;
+  }
+  .resp-landing-content .text-xl {
+    font-size: 1.5em;
+  }
+  .resp-landing-content .text-center {
+    font-size: 1.15em;
+  }
+
+  .resp-home-content .text-xl {
+    font-size: 1.5em;
+  }
+  .resp-home-content .text-xs {
+    font-size: 1em;
+  }
+
+  .storeimg-container .images {
+    overflow-x: hidden !important;
+  }
+
+  .resp-transactionlist {
+    padding: 1em;
+  }
+  .resp-transactionlist .text-sm {
+    font-size: 1em;
+  }
+  .resp-transactionlist .text-xs {
+    font-size: 0.8em;
+  }
+}
+
+@media (max-width: 1300px) {
+  .resp-storedesk-container {
+    grid-template-columns: 1fr;
+  }
+}

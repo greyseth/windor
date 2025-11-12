@@ -14,8 +14,10 @@ import Checkbox from "../components/Checkbox";
 import { Link, useNavigate } from "react-router-dom";
 import request from "../util/API";
 import { PopupContext } from "../providers/PopupProvider";
+import { MobileContext } from "../providers/MobileProvider";
 
 export default function Auth() {
+  const { isMobile, setIsMobile } = useContext(MobileContext);
   const [formType, setFormType] = useState("login");
 
   return (
@@ -27,15 +29,41 @@ export default function Auth() {
       </div>
 
       {/* Login Page Content Container */}
-      <div className="w-full h-screen flex flex-col justify-between p-8 [&>div]:grow [&>div]:flex [&>div]:flex-col [&>div]:items-stretch [&>div]:justify-center">
-        <div>
-          <h1 className="text-4xl font-bold text-white text-center">WINDOR</h1>
-        </div>
+      <div
+        className={`w-full h-screen flex flex-col justify-between p-8 ${
+          isMobile
+            ? "[&>div]:grow [&>div]:flex [&>div]:flex-col [&>div]:items-stretch [&>div]:justify-center"
+            : ""
+        }`}
+      >
+        {isMobile ? (
+          <>
+            <div>
+              <h1 className="text-4xl font-bold text-white text-center">
+                WINDOR
+              </h1>
+            </div>
 
-        {formType === "login" ? (
-          <LoginForm setFormType={setFormType} />
+            {formType === "login" ? (
+              <LoginForm setFormType={setFormType} />
+            ) : (
+              <RegisterForm setFormType={setFormType} />
+            )}
+          </>
         ) : (
-          <RegisterForm setFormType={setFormType} />
+          <div className="w-full h-full">
+            <div className="bg-white rounded-xl p-4 shadow-xl flex justify-evenly flex-col w-[50vw] max-w-[700px] mx-auto h-full">
+              <p className="text-4xl font-bold text-(--primary-color) text-center">
+                WINDOR
+              </p>
+              {formType === "login" ? (
+                <LoginForm setFormType={setFormType} />
+              ) : (
+                <RegisterForm setFormType={setFormType} />
+              )}
+            </div>
+            <div></div>
+          </div>
         )}
       </div>
     </>
@@ -112,19 +140,26 @@ function LoginForm({ setFormType }) {
           isChecked={rememberMe}
           onChange={(v) => setRememberMe(v)}
         /> */}
-        <button className="btn white mt-4" onClick={handleLogin}>
+        <button className="btn white mt-4 w-full" onClick={handleLogin}>
           LOGIN
         </button>
       </div>
 
+      <p
+        className="text-center underline text-black cursor-pointer select-none"
+        onClick={() => setFormType("register")}
+      >
+        Don't have an account?
+      </p>
+
       {/* Alternative Methods */}
       <div style={{ justifyContent: "flex-end" }}>
-        <p
+        {/* <p
           className="text-center underline text-black cursor-pointer select-none"
           onClick={() => setFormType("register")}
         >
           Don't have an account?
-        </p>
+        </p> */}
         {/* <div className="grid grid-cols-[1fr_1fr]">
           <div className="p-2">
             <button className="btn white border-2 w-full">
@@ -145,10 +180,12 @@ function LoginForm({ setFormType }) {
 function RegisterForm({ setFormType }) {
   const { loginToken, setLoginToken } = useContext(LoginContext);
   const { popup, setPopup } = useContext(PopupContext);
+  const navigate = useNavigate();
 
   const [registerInput, setRegisterInput] = useState({});
 
   async function handleRegister() {
+    console.log(registerInput);
     if (
       !registerInput.username ||
       !registerInput.email ||
@@ -184,7 +221,7 @@ function RegisterForm({ setFormType }) {
       message: "Successfully registered new account",
     });
 
-    // TODO: Navigate to home page
+    navigate("/app");
   }
 
   return (
@@ -195,7 +232,7 @@ function RegisterForm({ setFormType }) {
           type={"text"}
           value={registerInput.username}
           placeholder={"Username"}
-          onChange={(v) => setLoginInput({ ...registerInput, username: v })}
+          onChange={(v) => setRegisterInput({ ...registerInput, username: v })}
           img={personIcon}
           customStyle={``}
         />
@@ -224,19 +261,26 @@ function RegisterForm({ setFormType }) {
           isChecked={rememberMe}
           onChange={(v) => setRememberMe(v)}
         /> */}
-        <button className="btn white mt-4" onClick={handleRegister}>
+        <button className="btn white mt-4 w-full" onClick={handleRegister}>
           REGISTER
         </button>
       </div>
 
+      <a
+        className="text-center w-full underline text-black cursor-pointer select-none"
+        onClick={() => setFormType("login")}
+      >
+        Already have an account?
+      </a>
+
       {/* Alternative Methods */}
       <div style={{ justifyContent: "flex-end" }}>
-        <a
-          className="text-center underline text-black cursor-pointer select-none"
+        {/* <a
+          className="text-center w-full underline text-black cursor-pointer select-none"
           onClick={() => setFormType("login")}
         >
           Already have an account?
-        </a>
+        </a> */}
         {/* <div className="grid grid-cols-[1fr_1fr]">
           <div className="p-2">
             <button className="btn white border-2 w-full">

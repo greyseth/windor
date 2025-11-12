@@ -2,6 +2,7 @@
   --popup-margin: 0.5em;
 
   width: calc(100% - var(--popup-margin) * 2);
+  max-width: 600px;
   margin: var(--popup-margin);
 
   position: fixed;

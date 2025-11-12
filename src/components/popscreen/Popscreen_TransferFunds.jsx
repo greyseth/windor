@@ -12,7 +12,7 @@ export default function Popscreen_TransferFunds() {
 
   return (
     <div
-      className="w-full p-4 rounded-xl bg-white"
+      className="w-full max-w-[700px] p-4 rounded-xl bg-white"
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();

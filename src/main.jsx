@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "../src/assets/css/style.css";
+import "../src/assets/css/responsive.css";
 import App from "./App.jsx";
 import LoginProvider from "./providers/LoginProvider.jsx";
 import LoginChecker from "./components/global/LoginChecker.jsx";
@@ -23,8 +24,8 @@ import PopscreenHandler from "./components/global/PopscreenHandler.jsx";
 import Transactions from "./pages/Transactions.jsx";
 import Receipt from "./pages/Receipt.jsx";
 import StoreSearch from "./pages/StoreSearch.jsx";
-
-// Build FIXMEs: Menu of the day, Navbar on smaller screen, search bar enter on mobile, checkout page checks, alternate login methods
+import MobileProvider from "./providers/MobileProvider.jsx";
+import MobileChecker from "./components/global/MobileChecker.jsx";
 
 const router = createBrowserRouter([
   {
@@ -90,20 +91,23 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <LoginProvider>
-      <PopupProvider>
-        <PopscreenProvider>
-          <SearchProvider>
-            <CartProvider>
-              <LoginChecker />
-              <PopupHandler />
-              <PopscreenHandler />
+    <MobileProvider>
+      <LoginProvider>
+        <PopupProvider>
+          <PopscreenProvider>
+            <SearchProvider>
+              <CartProvider>
+                <LoginChecker />
+                <PopupHandler />
+                <MobileChecker />
+                <PopscreenHandler />
 
-              <RouterProvider router={router} />
-            </CartProvider>
-          </SearchProvider>
-        </PopscreenProvider>
-      </PopupProvider>
-    </LoginProvider>
+                <RouterProvider router={router} />
+              </CartProvider>
+            </SearchProvider>
+          </PopscreenProvider>
+        </PopupProvider>
+      </LoginProvider>
+    </MobileProvider>
   </StrictMode>
 );

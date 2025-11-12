@@ -37,7 +37,7 @@ export default function Popscreen_Transfer() {
 
   return (
     <div
-      className="w-full p-4 rounded-xl bg-white"
+      className="w-full max-w-[700px] p-4 rounded-xl bg-white"
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -76,7 +76,7 @@ export default function Popscreen_Transfer() {
           users.length > 0 ? (
             users.map((u) => (
               <li
-                className="bg-white p-2 rounded-md flex items-center gap-4"
+                className="bg-white p-2 rounded-md flex items-center gap-4 cursor-pointer"
                 key={u.id_user}
                 onClick={() => setSelected(u)}
               >

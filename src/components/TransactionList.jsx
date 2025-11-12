@@ -1,12 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import dropdownIcon from "../assets/icons/icon_dropdown_black.svg";
 import receiptIcon from "../assets/icons/icon_order.svg";
-import testImg from "../assets/img/img_testing.png";
 import { useNavigate } from "react-router-dom";
 import formatDate from "../util/formatDate";
 import getImage from "../util/getImage";
+import { MobileContext } from "../providers/MobileProvider";
+import { PopscreenContext } from "../providers/PopscreenProvider";
+import Popscreen_Receipt from "./popscreen/Popscreen_Receipt";
 
 export default function TransactionList({ label, transactions }) {
+  const { isMobile, setIsMobile } = useContext(MobileContext);
+  const { popscreen, setPopscreen } = useContext(PopscreenContext);
   const navigate = useNavigate();
   const list = useRef(undefined);
 
@@ -23,7 +27,7 @@ export default function TransactionList({ label, transactions }) {
   return (
     <>
       <div
-        className="w-full p-4 flex justify-between items-center active:bg-gray-500/30 transition-colors"
+        className="w-full p-4 flex justify-between items-center cursor-pointer select-none active:bg-gray-500/30 transition-colors"
         onClick={() => setCollapsed(!collapsed)}
       >
         <p className="font-bold">{label}</p>
@@ -48,8 +52,15 @@ export default function TransactionList({ label, transactions }) {
           transactions.map((t) => (
             <li
               key={t.id_order}
-              className="p-2 rounded-lg bg-white shadow-lg"
-              onClick={() => navigate("/app/transactions/" + t.id_order)}
+              className="p-2 rounded-lg bg-white shadow-lg resp-transactionlist"
+              onClick={() => {
+                if (isMobile) navigate("/app/transactions/" + t.id_order);
+                else
+                  setPopscreen({
+                    element: <Popscreen_Receipt />,
+                    id_order: t.id_order,
+                  });
+              }}
             >
               <div className="flex justify-between items-center gap-2">
                 <p className="font-bold text-sm">{t.store.name}</p>
@@ -60,7 +71,7 @@ export default function TransactionList({ label, transactions }) {
               <div className="grid grid-cols-[30%_1fr] gap-2 mt-2">
                 <img
                   src={getImage(t.store.thumbnail)}
-                  className="w-full h-auto aspect-square object-cover rounded-lg"
+                  className="w-full mx-auto max-w-32 h-auto aspect-square object-cover rounded-lg"
                 />
                 <div>
                   <p className="font-bold">

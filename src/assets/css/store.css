@@ -55,6 +55,21 @@
   border-bottom: 4px solid var(--secondary-color);
 }
 
+.square-store .blacktrans {
+  opacity: 0;
+  transition: 0.25s;
+}
+.square-store:hover .blacktrans {
+  opacity: 1;
+}
+.square-store .details {
+  transform: translateY(100%);
+  transition: 0.25s;
+}
+.square-store:hover .details {
+  transform: translateY(0%);
+}
+
 .checkout {
   width: 100%;
   padding: 1em;

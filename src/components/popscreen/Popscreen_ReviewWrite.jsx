@@ -16,7 +16,8 @@ export default function Popscreen_ReviewWrite() {
   async function handleReview() {
     const response = await request(
       "POST",
-      "/store/" + popscreen.id_store + "/review"
+      "/store/" + popscreen.id_store + "/review",
+      review
     );
     if (response && response.error)
       return setPopup({
@@ -50,7 +51,7 @@ export default function Popscreen_ReviewWrite() {
         {[...Array(5)].map((_, i) => (
           <img
             src={i <= review.stars ? starIcon : starIconWhite}
-            onClick={() => setReview({ ...review, stars: i })}
+            onClick={() => setReview({ ...review, stars: i + 1 })}
           />
         ))}
       </div>
