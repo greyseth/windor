@@ -6,7 +6,7 @@ export default function NotFound() {
 
   return (
     <>
-      <div className="w-full h-full flex flex-col justify-center items-center gap-8 text-center">
+      <div className="w-full h-screen flex flex-col justify-center items-center gap-8 text-center">
         <h1 className="text-3xl font-bold">404</h1>
         <p className="font-bold">
           The URL at {location.pathname} was not found. Make sure the path is

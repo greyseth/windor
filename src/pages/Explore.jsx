@@ -302,6 +302,8 @@ export default function Explore() {
                 );
                 if (!response || response.error)
                   return setStores({ ...stores, error: true });
+
+                if (response.length < 1) return setNoPersonalItems(true);
                 setStores({ loading: false, data: response });
               }}
               label={"Based on your recent orders"}
@@ -317,6 +319,8 @@ export default function Explore() {
                 );
                 if (!response || response.error)
                   return setStores({ ...stores, error: true });
+
+                if (response.length < 1) return setNoPersonalItems(true);
                 setStores({ loading: false, data: response });
               }}
               label={"Based on your recent orders"}

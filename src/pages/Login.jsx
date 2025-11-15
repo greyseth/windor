@@ -19,6 +19,7 @@ import { MobileContext } from "../providers/MobileProvider";
 export default function Auth() {
   const { isMobile, setIsMobile } = useContext(MobileContext);
   const [formType, setFormType] = useState("login");
+  const navigate = useNavigate();
 
   return (
     <>
@@ -49,6 +50,12 @@ export default function Auth() {
             ) : (
               <RegisterForm setFormType={setFormType} />
             )}
+            <button
+              className="btn primary full"
+              onClick={() => navigate("/app")}
+            >
+              Back to Home
+            </button>
           </>
         ) : (
           <div className="w-full h-full">
@@ -61,6 +68,12 @@ export default function Auth() {
               ) : (
                 <RegisterForm setFormType={setFormType} />
               )}
+              <button
+                className="btn primary full"
+                onClick={() => navigate("/app")}
+              >
+                Back to Home
+              </button>
             </div>
             <div></div>
           </div>
