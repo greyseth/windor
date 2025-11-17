@@ -7,9 +7,16 @@ import getImage from "../util/getImage";
 import { MobileContext } from "../providers/MobileProvider";
 import { PopscreenContext } from "../providers/PopscreenProvider";
 import Popscreen_Receipt from "./popscreen/Popscreen_Receipt";
+import request from "../util/API";
+import { PopupContext } from "../providers/PopupProvider";
 
-export default function TransactionList({ label, transactions }) {
+export default function TransactionList({
+  label,
+  transactions,
+  setTransactions,
+}) {
   const { isMobile, setIsMobile } = useContext(MobileContext);
+  const { popup, setPopup } = useContext(PopupContext);
   const { popscreen, setPopscreen } = useContext(PopscreenContext);
   const navigate = useNavigate();
   const list = useRef(undefined);
@@ -81,14 +88,17 @@ export default function TransactionList({ label, transactions }) {
                     {t.order_amount} Items
                   </p>
                   <p>Paid in {t.order_payment}</p>
+                  {t.order_cancel_reason ? (
+                    <p>Cancelled Because: {t.order_cancel_reason}</p>
+                  ) : null}
                 </div>
                 <p
                   className={`text-center my-auto font-bold ${
                     t.order_status === "DONE"
                       ? "text-green-400"
-                      : t.order_status === "ACCEPTED"
+                      : t.order_status === "ACCEPT"
                       ? "text-blue-400"
-                      : t.order_status === "CANCELLED"
+                      : t.order_status === "CANCEL"
                       ? "text-red-400"
                       : "text-yellow-400"
                   }`}
@@ -97,12 +107,36 @@ export default function TransactionList({ label, transactions }) {
                 </p>
                 <div className="flex justify-end items-stretch gap-2">
                   <img src={receiptIcon} className="btn primary smaller" />
-                  {t.order_status === "ACCEPTED" ? (
+                  {t.order_status === "ACCEPT" ? (
                     <button
                       className="btn primary smaller"
-                      onClick={(e) => {
+                      onClick={async (e) => {
                         e.preventDefault();
                         e.stopPropagation();
+
+                        const response = await request(
+                          "PATCH",
+                          "/order/" + t.id_order + "/done"
+                        );
+                        if (response && response.error)
+                          return setPopup({
+                            type: "error",
+                            title: "Failed to change order status",
+                            message: "An error has occurred",
+                          });
+
+                        setTransactions((prev) =>
+                          prev.map((pt) =>
+                            pt.id_order !== t.id_order
+                              ? pt
+                              : { ...pt, order_status: "DONE" }
+                          )
+                        );
+                        setPopup({
+                          type: "success",
+                          title: "Successfully changed order status",
+                          message: "Order has been marked as done and complete",
+                        });
                       }}
                     >
                       Mark as Done

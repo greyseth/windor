@@ -355,6 +355,7 @@ export default function Profile() {
                     transactions={transactions.data.filter(
                       (t) => t.order_status === "PENDING"
                     )}
+                    setTransactions={setTransactions}
                   />
 
                   <TransactionList
@@ -364,10 +365,12 @@ export default function Profile() {
                         t.order_status !== "PENDING" &&
                         t.order_status !== "DONE"
                     )}
+                    setTransactions={setTransactions}
                   />
                   <TransactionList
                     label={"All Transactions"}
                     transactions={transactions.data}
+                    setTransactions={setTransactions}
                   />
                 </>
               )}
