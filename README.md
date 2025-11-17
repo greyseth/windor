@@ -17,6 +17,12 @@ Anggota Kelompok:
 - Fadhil Iman Pratomo
 - Muhammad Ihsan Ruki
 
+# Perkembangan
+Untuk keperluan demonstrasi lomba, tidak semua fitur terimplementasikan. Diantaranya yang hanya merupakan tampilan pada frontend adalah;
+- Sistem Wincoins
+- Pembelian kupon
+- Seller store management page
+
 # Petunjuk Instalasi
 ### 1. **Clone Repository**
 ```bash
